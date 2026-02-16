@@ -61,7 +61,7 @@ function SolicitudCard({ solicitud, onCambiarEstado, onEliminar, formatearFecha,
           )}
 
           <button
-            onClick={() => onEliminar(solicitud.id)}
+            onClick={() => onEliminar(solicitud)}
             className="btn-eliminar"
             style={{ marginLeft: 'auto' }}
           >

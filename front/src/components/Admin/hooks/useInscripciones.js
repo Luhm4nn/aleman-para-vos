@@ -24,6 +24,11 @@ export function useInscripciones() {
         id: null,
         name: "",
     });
+    const [confirmModal, setConfirmModal] = useState({
+        isOpen: false,
+        id: null,
+        name: "",
+    });
 
     const getAuthHeaders = () => {
         const token = localStorage.getItem("token");
@@ -156,6 +161,27 @@ export function useInscripciones() {
         });
     };
 
+    const abrirModalConfirmar = (inscripcion) => {
+        setConfirmModal({
+            isOpen: true,
+            id: inscripcion.id,
+            name: `${inscripcion.nombre} ${inscripcion.apellido}`,
+        });
+    };
+
+    const cerrarModalConfirmar = () => {
+        setConfirmModal({
+            isOpen: false,
+            id: null,
+            name: "",
+        });
+    };
+
+    const confirmarAceptacion = async () => {
+        await confirmarInscripcion(confirmModal.id);
+        cerrarModalConfirmar();
+    };
+
     const confirmarEliminacion = async () => {
         await eliminarInscripcion(deleteModal.id);
         cerrarModalEliminar();
@@ -179,6 +205,48 @@ export function useInscripciones() {
         }
     };
 
+    // Función para agrupar inscripciones por curso y dictado
+    const agruparInscripciones = () => {
+        const grupos = {};
+
+        inscripciones.forEach((inscripcion) => {
+            const dictado = inscripcion.dictadoCurso;
+            const curso = dictado?.curso;
+
+            if (!dictado || !curso) return;
+
+            const cursoKey = curso.id;
+            const dictadoKey = dictado.id;
+
+            if (!grupos[cursoKey]) {
+                grupos[cursoKey] = {
+                    curso,
+                    dictados: {}
+                };
+            }
+
+            if (!grupos[cursoKey].dictados[dictadoKey]) {
+                grupos[cursoKey].dictados[dictadoKey] = {
+                    dictado,
+                    inscripciones: []
+                };
+            }
+
+            grupos[cursoKey].dictados[dictadoKey].inscripciones.push(inscripcion);
+        });
+
+        // Convertir a array y ordenar
+        return Object.values(grupos)
+            .sort((a, b) => a.curso.titulo.localeCompare(b.curso.titulo))
+            .map(grupo => ({
+                curso: grupo.curso,
+                dictados: Object.values(grupo.dictados).sort((a, b) => {
+                    // Ordenar por fecha de inicio del dictado
+                    return new Date(a.dictado.fechaInicio) - new Date(b.dictado.fechaInicio);
+                })
+            }));
+    };
+
     useEffect(() => {
         cargarInscripciones(1);
     }, [filtro]);
@@ -197,9 +265,14 @@ export function useInscripciones() {
         cambiarEstado,
         confirmarInscripcion,
         abrirModalEliminar,
+        abrirModalConfirmar,
         cargarInscripciones,
         deleteModal,
+        confirmModal,
         cerrarModalEliminar,
+        cerrarModalConfirmar,
         confirmarEliminacion,
+        confirmarAceptacion,
+        agruparInscripciones,
     };
 }

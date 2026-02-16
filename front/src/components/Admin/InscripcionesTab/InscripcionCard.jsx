@@ -1,12 +1,6 @@
 import DOMPurify from "dompurify";
-import CustomSelect from "../../shared/CustomSelect";
 
-const ESTADO_OPTIONS = [
-    { value: "pendiente", label: "Pendiente" },
-    { value: "confirmada", label: "Confirmada" },
-];
-
-function InscripcionCard({ inscripcion, onCambiarEstado, onConfirmar, onEliminar, formatearFecha, getEstadoColor }) {
+function InscripcionCard({ inscripcion, onConfirmar, onEliminar, formatearFecha, getEstadoColor }) {
     const dictado = inscripcion.dictadoCurso;
     const curso = dictado?.curso;
 
@@ -44,19 +38,9 @@ function InscripcionCard({ inscripcion, onCambiarEstado, onConfirmar, onEliminar
 
             <div className="solicitud-actions">
                 <div style={{ display: 'flex', gap: '1rem', width: '100%', alignItems: 'center', flexWrap: 'wrap' }}>
-                    <div style={{ width: '200px' }}>
-                        <CustomSelect
-                            value={inscripcion.estado}
-                            options={ESTADO_OPTIONS}
-                            onChange={(e) => onCambiarEstado(inscripcion.id, e.target.value)}
-                            placeholder="Estado"
-                            name="estado"
-                        />
-                    </div>
-
                     {inscripcion.estado === 'pendiente' && (
                         <button
-                            onClick={() => onConfirmar(inscripcion.id)}
+                            onClick={() => onConfirmar(inscripcion)}
                             className="btn-guardar"
                             style={{ padding: '0.6rem 1rem' }}
                         >

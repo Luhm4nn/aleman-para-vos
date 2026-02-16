@@ -132,7 +132,7 @@ export function useSolicitudes() {
     setDeleteModal({
       isOpen: true,
       id: solicitud.id,
-      name: solicitud.nombreCompleto,
+      name: solicitud.nombre,
     });
   };
 

@@ -17,6 +17,46 @@ export class CursosService {
   // ========== MÉTODOS PARA CURSOS ==========
 
   /**
+   * Helper para mapear dictados con sus cupos disponibles
+   */
+  private _mapDictado(dictado: any) {
+    if (!dictado) return null;
+
+    // Solo contamos las inscripciones confirmadas
+    const inscripcionsConfirmadas = Array.isArray(dictado.inscripcions)
+      ? dictado.inscripcions.length
+      : 0;
+
+    // Calculamos cupos disponibles
+    const cuposTotales = dictado.cupos || 0;
+    const cuposDisponibles = Math.max(0, cuposTotales - inscripcionsConfirmadas);
+
+    // Creamos el objeto de retorno forzando a que sea un objeto plano
+    const mapped = {
+      ...dictado,
+      cuposDisponibles
+    };
+
+    // Quitamos la relación inscripcions para que no viaje al front
+    delete (mapped as any).inscripcions;
+
+    return mapped;
+  }
+
+  /**
+   * Inclusión común para obtener inscripciones confirmadas
+   */
+  private get _dictadoInclude() {
+    return {
+      inscripcions: {
+        where: { estado: 'confirmada' },
+        select: { id: true },
+      },
+      curso: true,
+    };
+  }
+
+  /**
    * Crear un nuevo curso
    */
   async create(createCursoDto: CreateCursoDto) {
@@ -37,14 +77,26 @@ export class CursosService {
    * Obtener todos los cursos con sus dictados
    */
   async findAll() {
-    return this.prisma.curso.findMany({
+    const cursos = await this.prisma.curso.findMany({
       include: {
-        dictados_curso: true,
+        dictados_curso: {
+          include: {
+            inscripcions: {
+              where: { estado: 'confirmada' },
+              select: { id: true },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',
       },
     });
+
+    return cursos.map((curso) => ({
+      ...curso,
+      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+    }));
   }
 
   /**
@@ -54,7 +106,14 @@ export class CursosService {
     const curso = await this.prisma.curso.findUnique({
       where: { id },
       include: {
-        dictados_curso: true,
+        dictados_curso: {
+          include: {
+            inscripcions: {
+              where: { estado: 'confirmada' },
+              select: { id: true },
+            },
+          },
+        },
       },
     });
 
@@ -62,7 +121,10 @@ export class CursosService {
       throw new NotFoundException(`Curso con ID ${id} no encontrado`);
     }
 
-    return curso;
+    return {
+      ...curso,
+      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+    };
   }
 
   /**
@@ -85,16 +147,28 @@ export class CursosService {
       dataSanitizada.activo = updateCursoDto.activo;
     }
 
-    return this.prisma.curso.update({
+    const curso = await this.prisma.curso.update({
       where: { id },
       data: {
         ...dataSanitizada,
         updatedAt: new Date(),
       },
       include: {
-        dictados_curso: true,
+        dictados_curso: {
+          include: {
+            inscripcions: {
+              where: { estado: 'confirmada' },
+              select: { id: true },
+            },
+          },
+        },
       },
     });
+
+    return {
+      ...curso,
+      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+    };
   }
 
   /**
@@ -114,11 +188,11 @@ export class CursosService {
    * Crear un nuevo dictado de curso
    */
   async createDictado(createDictadoDto: CreateDictadoCursoDto) {
-    const curso = await this.prisma.curso.findUnique({
+    const cursoExists = await this.prisma.curso.findUnique({
       where: { id: createDictadoDto.cursoId },
     });
 
-    if (!curso) {
+    if (!cursoExists) {
       throw new NotFoundException(
         `Curso con ID ${createDictadoDto.cursoId} no encontrado`,
       );
@@ -134,7 +208,7 @@ export class CursosService {
       );
     }
 
-    return this.prisma.dictadoCurso.create({
+    const dictado = await this.prisma.dictadoCurso.create({
       data: {
         cursoId: createDictadoDto.cursoId,
         horarioInicio: createDictadoDto.horarioInicio,
@@ -150,25 +224,38 @@ export class CursosService {
       },
       include: {
         curso: true,
+        inscripcions: {
+          where: { estado: 'confirmada' },
+          select: { id: true },
+        },
       },
     });
+
+    return this._mapDictado(dictado);
   }
 
   /**
    * Obtener todos los dictados de un curso
    */
   async findDictadosByCurso(cursoId: number) {
-    await this.findOne(cursoId);
+    const cursoExists = await this.prisma.curso.findUnique({ where: { id: cursoId } });
+    if (!cursoExists) throw new NotFoundException(`Curso con ID ${cursoId} no encontrado`);
 
-    return this.prisma.dictadoCurso.findMany({
+    const dictados = await this.prisma.dictadoCurso.findMany({
       where: { cursoId },
       include: {
         curso: true,
+        inscripcions: {
+          where: { estado: 'confirmada' },
+          select: { id: true },
+        },
       },
       orderBy: {
         fechaInicio: 'desc',
       },
     });
+
+    return dictados.map((d) => this._mapDictado(d));
   }
 
   /**
@@ -179,6 +266,10 @@ export class CursosService {
       where: { id },
       include: {
         curso: true,
+        inscripcions: {
+          where: { estado: 'confirmada' },
+          select: { id: true },
+        },
       },
     });
 
@@ -186,7 +277,7 @@ export class CursosService {
       throw new NotFoundException(`Dictado con ID ${id} no encontrado`);
     }
 
-    return dictado;
+    return this._mapDictado(dictado);
   }
 
   /**
@@ -219,7 +310,7 @@ export class CursosService {
       }
     }
 
-    return this.prisma.dictadoCurso.update({
+    const dictado = await this.prisma.dictadoCurso.update({
       where: { id },
       data: {
         cursoId: updateDictadoDto.cursoId,
@@ -235,8 +326,14 @@ export class CursosService {
       },
       include: {
         curso: true,
+        inscripcions: {
+          where: { estado: 'confirmada' },
+          select: { id: true },
+        },
       },
     });
+
+    return this._mapDictado(dictado);
   }
 
   /**

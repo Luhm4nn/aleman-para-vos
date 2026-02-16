@@ -1,7 +1,17 @@
 import { useEffect } from 'react';
 import './DeleteConfirmationModal.css';
 
-function DeleteConfirmationModal({ isOpen, onClose, onConfirm, title, message, itemName }) {
+function DeleteConfirmationModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  itemName,
+  confirmText = 'Eliminar',
+  confirmClass = 'btn-eliminar',
+  icon = '⚠️'
+}) {
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape' && isOpen) {
@@ -24,24 +34,26 @@ function DeleteConfirmationModal({ isOpen, onClose, onConfirm, title, message, i
             ×
           </button>
         </div>
-        
+
         <div className="delete-modal-body">
-          <div className="delete-icon">⚠️</div>
+          <div className="delete-icon">{icon}</div>
           <p className="delete-message">
             {message || '¿Estás seguro de que deseas eliminar este elemento?'}
           </p>
           {itemName && (
             <p className="delete-item-name">"{itemName}"</p>
           )}
-          <p className="delete-warning">Esta acción no se puede deshacer.</p>
+          {confirmClass === 'btn-eliminar' && (
+            <p className="delete-warning">Esta acción no se puede deshacer.</p>
+          )}
         </div>
 
         <div className="delete-modal-actions">
           <button onClick={onClose} className="btn-cancelar">
             Cancelar
           </button>
-          <button onClick={onConfirm} className="btn-eliminar">
-            Eliminar
+          <button onClick={onConfirm} className={confirmClass}>
+            {confirmText}
           </button>
         </div>
       </div>

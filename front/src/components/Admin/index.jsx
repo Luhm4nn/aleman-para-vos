@@ -79,7 +79,7 @@ function Admin() {
             contadores={inscripcionesData.contadores}
             paginacion={inscripcionesData.paginacion}
             onCambiarEstado={inscripcionesData.cambiarEstado}
-            onConfirmar={inscripcionesData.confirmarInscripcion}
+            onConfirmar={inscripcionesData.abrirModalConfirmar}
             onEliminar={inscripcionesData.abrirModalEliminar}
             onCambiarPagina={inscripcionesData.cargarInscripciones}
             formatearFecha={formatearFecha}
@@ -87,6 +87,9 @@ function Admin() {
             deleteModal={inscripcionesData.deleteModal}
             onCerrarModalEliminar={inscripcionesData.cerrarModalEliminar}
             onConfirmarEliminacion={inscripcionesData.confirmarEliminacion}
+            confirmModal={inscripcionesData.confirmModal}
+            onCerrarModalConfirmar={inscripcionesData.cerrarModalConfirmar}
+            onConfirmarAceptacion={inscripcionesData.confirmarAceptacion}
           />
         )}
 

@@ -212,7 +212,7 @@ function Inscripcion() {
                             <div className="dictados-grid">
                                 {curso.dictados_curso && curso.dictados_curso.filter(d => d.activo).length > 0 ? (
                                     curso.dictados_curso.filter(d => d.activo).map((dictado) => {
-                                        const sinCupos = dictado.cupos > 0 && (dictado._count?.inscripcions || 0) >= dictado.cupos;
+                                        const sinCupos = dictado.cupos > 0 && dictado.cuposDisponibles <= 0;
                                         return (
                                             <div key={dictado.id} className={`dictado-card-full ${sinCupos ? 'sin-cupos' : ''}`}>
                                                 <div className="dictado-header-full">
@@ -239,9 +239,10 @@ function Inscripcion() {
                                                     </div>
                                                     {dictado.cupos > 0 && (
                                                         <div className="dictado-info-item cupos-info">
+                                                            {/* DEBUG: console.log("Dictado data:", dictado) */}
                                                             <span className="info-label">Cupos:</span>
                                                             <span className={`info-value ${sinCupos ? 'text-error' : ''}`}>
-                                                                {sinCupos ? '¡Completo!' : `${dictado.cupos - (dictado._count?.inscripcions || 0)} disponibles`}
+                                                                {sinCupos ? '¡Completo!' : `${dictado.cuposDisponibles ?? 0} disponibles de ${dictado.cupos}`}
                                                             </span>
                                                         </div>
                                                     )}
