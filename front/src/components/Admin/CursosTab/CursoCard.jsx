@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronDownIcon, PlusIcon, PencilIcon, TrashIcon } from '../../shared/UI/Icons';
 
 function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDictado, onEliminarDictado, formatearFecha }) {
   const [dictadosExpanded, setDictadosExpanded] = useState(false);
@@ -9,10 +10,10 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
         <h3>{curso.titulo}</h3>
         <div className="curso-actions">
           <button onClick={() => onEditar(curso)} className="btn-editar">
-            Editar
+            <PencilIcon className="w-4 h-4" /> Editar
           </button>
           <button onClick={() => onEliminar(curso)} className="btn-eliminar">
-            Eliminar
+            <TrashIcon className="w-4 h-4" /> Eliminar
           </button>
         </div>
       </div>
@@ -31,7 +32,7 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
         </div>
       )}
 
-      {curso.dictados_curso && curso.dictados_curso.length > 0 && (
+      {curso.dictadosCurso && curso.dictadosCurso.length > 0 && (
         <div className="dictados-section">
           <button
             className="dictados-toggle"
@@ -39,16 +40,14 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
           >
             <div className="dictados-toggle-content">
               <strong>Dictados Programados</strong>
-              <span className="dictados-count">{curso.dictados_curso.length}</span>
+              <span className="dictados-count">{curso.dictadosCurso.length || 0}</span>
             </div>
-            <span className={`toggle-icon ${dictadosExpanded ? 'expanded' : ''}`}>
-              ▼
-            </span>
+            <ChevronDownIcon className={`toggle-icon ${dictadosExpanded ? 'expanded' : ''}`} />
           </button>
 
           {dictadosExpanded && (
             <div className="dictados-list">
-              {curso.dictados_curso.map((dictado) => (
+              {curso.dictadosCurso.map((dictado) => (
                 <div key={dictado.id} className="dictado-item">
                   <div className="dictado-info">
                     <div className="dictado-horario">
@@ -65,13 +64,13 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
                       onClick={() => onEditarDictado(curso, dictado)}
                       className="btn-editar"
                     >
-                      Editar
+                      <PencilIcon className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onEliminarDictado(dictado, curso.titulo)}
                       className="btn-eliminar"
                     >
-                      Eliminar
+                      <TrashIcon className="w-4 h-4" />
                     </button>
                   </div>
 
@@ -85,7 +84,7 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
       <div className="curso-footer">
         <span className="fecha">Creado: {formatearFecha(curso.createdAt)}</span>
         <button onClick={() => onAgregarDictado(curso)} className="btn-editar">
-          + Agregar Dictado
+          <PlusIcon className="w-4 h-4" /> Agregar Dictado
         </button>
       </div>
     </div>

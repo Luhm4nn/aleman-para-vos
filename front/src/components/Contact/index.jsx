@@ -1,12 +1,15 @@
 
 import { useState } from "react";
 import { useToast } from "../../contexts/ToastContext";
+import { useLoading } from "../../contexts/LoadingContext";
+import { EnvelopeIcon } from "../shared/UI/Icons";
 import "./Contact.css";
 import CustomSelect from "../shared/CustomSelect";
 import { countries } from "../shared/CustomSelect/countries";
 
 function Contact() {
   const { showSuccess, showError, showWarning } = useToast();
+  const { startLoading, stopLoading } = useLoading();
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -34,6 +37,7 @@ function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    startLoading("Enviando tu mensaje...");
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -76,6 +80,7 @@ ${formData.mensaje}`;
       showError("Hubo un error al enviar tu solicitud.");
     } finally {
       setLoading(false);
+      stopLoading();
     }
   };
 
@@ -85,7 +90,7 @@ ${formData.mensaje}`;
         <div className="contact-wrapper">
           <div className="contact-header">
             <h2 className="section-title white">
-              ✉️ ¿Tienes consultas? Envianos un mensaje y te contactaré pronto.
+              <EnvelopeIcon className="inline-icon" /> ¿Tienes consultas? Envianos un mensaje y te contactaré pronto.
             </h2>
           </div>
 

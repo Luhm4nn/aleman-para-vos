@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { EnvelopeIcon } from "../../shared/UI/Icons";
 import "../SolicitudesTab/SolicitudesTab.css";
 import FiltrosInscripciones from "./FiltrosInscripciones";
 import InscripcionCard from "./InscripcionCard";
 import Paginacion from "../SolicitudesTab/Paginacion";
-import DeleteConfirmationModal from "../DeleteConfirmationModal";
+import DeleteConfirmationModal from "../../shared/DeleteConfirmationModal";
 
 function InscripcionesTab({
     inscripciones,
@@ -196,7 +197,7 @@ function InscripcionesTab({
                 itemName={confirmModal.name}
                 confirmText="Confirmar"
                 confirmClass="btn-guardar"
-                icon="📧"
+                icon={<EnvelopeIcon className="w-12 h-12 text-primary" />}
             />
         </div>
     );

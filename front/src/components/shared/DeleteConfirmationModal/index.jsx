@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { ExclamationTriangleIcon, XMarkIcon } from '../UI/Icons';
 import './DeleteConfirmationModal.css';
 
 function DeleteConfirmationModal({
@@ -10,7 +11,7 @@ function DeleteConfirmationModal({
   itemName,
   confirmText = 'Eliminar',
   confirmClass = 'btn-eliminar',
-  icon = '⚠️'
+  icon = <ExclamationTriangleIcon className="w-12 h-12 text-warning" />
 }) {
   useEffect(() => {
     const handleEscape = (e) => {
@@ -30,8 +31,8 @@ function DeleteConfirmationModal({
       <div className="delete-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="delete-modal-header">
           <h2>{title || 'Confirmar Eliminación'}</h2>
-          <button className="modal-close" onClick={onClose}>
-            ×
+          <button className="modal-close" onClick={onClose} aria-label="Cerrar">
+            <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 

@@ -2,7 +2,7 @@ import "./SolicitudesTab.css";
 import FiltrosSolicitudes from "./FiltrosSolicitudes";
 import SolicitudCard from "./SolicitudCard";
 import Paginacion from "./Paginacion";
-import DeleteConfirmationModal from "../DeleteConfirmationModal";
+import DeleteConfirmationModal from "../../shared/DeleteConfirmationModal";
 
 function SolicitudesTab({
   solicitudes,

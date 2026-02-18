@@ -1,3 +1,5 @@
+import { PlusIcon, TrashIcon } from "../../shared/UI/Icons";
+
 function CursoForm({
   formCurso,
   onChange,
@@ -64,14 +66,15 @@ function CursoForm({
                   onClick={() => onEliminarItem(index)}
                   className="btn-eliminar"
                   style={{ padding: '0.4rem 0.8rem' }}
+                  title="Eliminar item"
                 >
-                  ✕
+                  <TrashIcon className="w-4 h-4" />
                 </button>
               )}
             </div>
           ))}
           <button type="button" onClick={onAgregarItem} className="btn-editar">
-            + Agregar Item
+            <PlusIcon className="w-4 h-4" /> Agregar Item
           </button>
         </div>
 

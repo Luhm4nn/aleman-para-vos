@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../contexts/ToastContext";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 export function useSolicitudes() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { startLoading, stopLoading } = useLoading();
   const [solicitudes, setSolicitudes] = useState([]);
   const [filtro, setFiltro] = useState("todas");
   const [loading, setLoading] = useState(true);
@@ -69,6 +71,7 @@ export function useSolicitudes() {
 
   const cargarSolicitudes = async (page = 1) => {
     setLoading(true);
+    startLoading("Cargando solicitudes...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const params = new URLSearchParams({
@@ -109,22 +112,38 @@ export function useSolicitudes() {
       showError("Error al cargar las solicitudes");
     } finally {
       setLoading(false);
+      stopLoading();
     }
   };
 
   const cambiarEstado = async (id, nuevoEstado) => {
+    startLoading("Actualizando estado...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      await fetch(`${apiUrl}/solicitudes/${id}`, {
+      const response = await fetch(`${apiUrl}/solicitudes/${id}`, {
         method: "PATCH",
         headers: getAuthHeaders(),
         body: JSON.stringify({ estado: nuevoEstado }),
       });
-      showSuccess(`Estado actualizado a: ${nuevoEstado}`);
-      cargarSolicitudes();
-      cargarContadores();
+
+      if (response.status === 401) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
+      }
+
+      if (response.ok) {
+        showSuccess(`Estado actualizado a: ${nuevoEstado}`);
+      } else {
+        showError("Error al actualizar el estado");
+      }
+      await cargarSolicitudes(paginacion.page);
+      await cargarContadores();
     } catch (error) {
       showError("Error al actualizar el estado");
+    } finally {
+      stopLoading();
     }
   };
 
@@ -150,6 +169,7 @@ export function useSolicitudes() {
   };
 
   const eliminarSolicitud = async (id) => {
+    startLoading("Eliminando solicitud...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/solicitudes/${id}`, {
@@ -157,13 +177,24 @@ export function useSolicitudes() {
         headers: getAuthHeaders(),
       });
 
+      if (response.status === 401) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        navigate("/login");
+        return;
+      }
+
       if (response.ok) {
         showSuccess("Solicitud eliminada correctamente");
+      } else {
+        showError("Error al eliminar la solicitud");
       }
-      cargarSolicitudes();
-      cargarContadores();
+      await cargarSolicitudes(paginacion.page);
+      await cargarContadores();
     } catch (error) {
       showError("Error al eliminar la solicitud");
+    } finally {
+      stopLoading();
     }
   };
 

@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../contexts/ToastContext";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 export function useInscripciones() {
     const navigate = useNavigate();
     const { showSuccess, showError } = useToast();
+    const { startLoading, stopLoading } = useLoading();
     const [inscripciones, setInscripciones] = useState([]);
     const [filtro, setFiltro] = useState("todas");
     const [loading, setLoading] = useState(true);
@@ -67,6 +69,7 @@ export function useInscripciones() {
 
     const cargarInscripciones = async (page = 1) => {
         setLoading(true);
+        startLoading("Cargando inscripciones...");
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
             const params = new URLSearchParams({
@@ -102,29 +105,34 @@ export function useInscripciones() {
             showError("Error al cargar las inscripciones");
         } finally {
             setLoading(false);
+            stopLoading();
         }
     };
 
     const cambiarEstado = async (id, nuevoEstado) => {
+        startLoading("Actualizando estado...");
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
-            const response = await fetch(`${apiUrl}/inscripciones/${id}`, {
+            const response = await fetch(`${apiUrl}/inscripciones/${id}/estado`, {
                 method: "PATCH",
                 headers: getAuthHeaders(),
                 body: JSON.stringify({ estado: nuevoEstado }),
             });
 
-            if (!response.ok) throw new Error("Error al actualizar el estado");
+            if (!response.ok) throw new Error();
 
-            showSuccess(`Estado actualizado a: ${nuevoEstado}`);
-            cargarInscripciones(paginacion.page);
-            cargarContadores();
+            showSuccess("Estado actualizado");
+            await cargarInscripciones(paginacion.page);
+            await cargarContadores();
         } catch (error) {
             showError("Error al actualizar el estado");
+        } finally {
+            stopLoading();
         }
     };
 
     const confirmarInscripcion = async (id) => {
+        startLoading("Confirmando inscripción...");
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
             const response = await fetch(`${apiUrl}/inscripciones/${id}/confirmar`, {
@@ -138,10 +146,12 @@ export function useInscripciones() {
             }
 
             showSuccess("Inscripción confirmada y mail enviado al alumno");
-            cargarInscripciones(paginacion.page);
-            cargarContadores();
+            await cargarInscripciones(paginacion.page);
+            await cargarContadores();
         } catch (error) {
             showError(error.message || "Error al confirmar la inscripción");
+        } finally {
+            stopLoading();
         }
     };
 
@@ -188,6 +198,7 @@ export function useInscripciones() {
     };
 
     const eliminarInscripcion = async (id) => {
+        startLoading("Eliminando inscripción...");
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
             const response = await fetch(`${apiUrl}/inscripciones/${id}`, {
@@ -197,11 +208,15 @@ export function useInscripciones() {
 
             if (response.ok) {
                 showSuccess("Inscripción eliminada correctamente");
-                cargarInscripciones(paginacion.page);
-                cargarContadores();
+                await cargarInscripciones(paginacion.page);
+                await cargarContadores();
+            } else {
+                throw new Error();
             }
         } catch (error) {
             showError("Error al eliminar la inscripción");
+        } finally {
+            stopLoading();
         }
     };
 

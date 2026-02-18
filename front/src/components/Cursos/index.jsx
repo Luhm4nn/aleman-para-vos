@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CheckIcon } from '../shared/UI/Icons';
 import './Cursos.css';
 
 function Cursos() {
@@ -74,7 +75,9 @@ function Cursos() {
                                         <div className="curso-features-list">
                                             {curso.items.map((item, index) => (
                                                 <div key={index} className="curso-feature-item">
-                                                    <span className="check-icon">✓</span>
+                                                    <span className="check-icon-wrapper">
+                                                        <CheckIcon className="w-3 h-3 text-accent" />
+                                                    </span>
                                                     <span>{item}</span>
                                                 </div>
                                             ))}

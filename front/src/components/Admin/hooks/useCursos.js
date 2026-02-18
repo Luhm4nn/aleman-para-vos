@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../contexts/ToastContext";
+import { useLoading } from "../../../contexts/LoadingContext";
 
 export function useCursos() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { startLoading, stopLoading } = useLoading();
   const [cursos, setCursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formCurso, setFormCurso] = useState({
@@ -43,6 +45,7 @@ export function useCursos() {
 
   const cargarCursos = async () => {
     setLoading(true);
+    startLoading("Cargando cursos...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos`, {
@@ -62,6 +65,7 @@ export function useCursos() {
       showError("Error al cargar los cursos");
     } finally {
       setLoading(false);
+      stopLoading();
     }
   };
 
@@ -114,12 +118,14 @@ export function useCursos() {
       activo: formCurso.activo,
     };
 
+    const method = formCurso.id ? "PATCH" : "POST";
+    startLoading(formCurso.id ? "Actualizando curso..." : "Creando curso...");
+
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const url = formCurso.id
         ? `${apiUrl}/cursos/${formCurso.id}`
         : `${apiUrl}/cursos`;
-      const method = formCurso.id ? "PATCH" : "POST";
 
       const response = await fetch(url, {
         method,
@@ -146,9 +152,11 @@ export function useCursos() {
         formCurso.id ? "Curso actualizado exitosamente" : "Curso creado exitosamente"
       );
       cancelarEdicion();
-      cargarCursos();
+      await cargarCursos();
     } catch (error) {
       showError(error.message || "Error al guardar el curso");
+    } finally {
+      stopLoading();
     }
   };
 
@@ -192,15 +200,21 @@ export function useCursos() {
   };
 
   const confirmarEliminacion = async () => {
-    if (deleteModal.type === "curso") {
-      await eliminarCurso(deleteModal.id);
-    } else if (deleteModal.type === "dictado") {
-      await eliminarDictado(deleteModal.id);
+    startLoading("Eliminando...");
+    try {
+      if (deleteModal.type === "curso") {
+        await eliminarCurso(deleteModal.id);
+      } else if (deleteModal.type === "dictado") {
+        await eliminarDictado(deleteModal.id);
+      }
+    } finally {
+      cerrarModalEliminar();
+      stopLoading();
     }
-    cerrarModalEliminar();
   };
 
   const eliminarCurso = async (id) => {
+    startLoading("Eliminando curso...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos/${id}`, {
@@ -218,9 +232,11 @@ export function useCursos() {
       if (!response.ok) throw new Error("Error al eliminar el curso");
 
       showSuccess("Curso eliminado exitosamente");
-      cargarCursos();
+      await cargarCursos();
     } catch (error) {
       showError("Error al eliminar el curso");
+    } finally {
+      stopLoading();
     }
   };
 
@@ -323,6 +339,8 @@ export function useCursos() {
       activo: formDictado.activo,
     };
 
+    startLoading(formDictado.id ? "Actualizando dictado..." : "Guardando dictado...");
+
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const url = formDictado.id
@@ -357,13 +375,16 @@ export function useCursos() {
           : "Dictado creado exitosamente"
       );
       cerrarModalDictado();
-      cargarCursos();
+      await cargarCursos();
     } catch (error) {
       showError(error.message || "Error al guardar el dictado");
+    } finally {
+      stopLoading();
     }
   };
 
   const eliminarDictado = async (dictadoId) => {
+    startLoading("Eliminando dictado...");
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos/dictados/${dictadoId}`, {
@@ -381,9 +402,11 @@ export function useCursos() {
       if (!response.ok) throw new Error("Error al eliminar el dictado");
 
       showSuccess("Dictado eliminado exitosamente");
-      cargarCursos();
+      await cargarCursos();
     } catch (error) {
       showError("Error al eliminar el dictado");
+    } finally {
+      stopLoading();
     }
   };
 
@@ -417,3 +440,4 @@ export function useCursos() {
     confirmarEliminacion,
   };
 }
+ 

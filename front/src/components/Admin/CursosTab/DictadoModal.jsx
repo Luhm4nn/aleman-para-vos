@@ -1,3 +1,5 @@
+import { XMarkIcon } from "../../shared/UI/Icons";
+
 const DIAS_SEMANA = [
   "lunes",
   "martes",
@@ -27,8 +29,8 @@ function DictadoModal({
           <h2>
             {formDictado.id ? "Editar Dictado" : "Nuevo Dictado"} - {curso?.titulo}
           </h2>
-          <button className="modal-close" onClick={onClose}>
-            ✕
+          <button className="modal-close" onClick={onClose} aria-label="Cerrar">
+            <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 
