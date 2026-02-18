@@ -47,20 +47,22 @@ model Novedad {
   imagenUrl      String
   imagenPublicId String?
   createdAt      DateTime @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime @updatedAt
 
   @@map("novedades")
 }
 
 model Curso {
-  id             Int            @id @default(autoincrement())
-  titulo         String
-  descripcion    String
-  items          String[]
-  activo         Boolean        @default(true)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime
-  dictados_curso DictadoCurso[]
+  id            Int            @id @default(autoincrement())
+  titulo        String
+  descripcion   String
+  items         String[]
+  activo        Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  dictadosCurso DictadoCurso[]
+
+  @@map("cursos")
 }
 
 model DictadoCurso {
@@ -75,9 +77,11 @@ model DictadoCurso {
   cupos            Int           @default(0)
   activo           Boolean       @default(true)
   createdAt        DateTime      @default(now())
-  updatedAt        DateTime
+  updatedAt        DateTime      @updatedAt
   curso            Curso         @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  inscripcions     Inscripcion[]
+  inscripciones    Inscripcion[]
+
+  @@map("dictados_curso")
 }
 
 model Inscripcion {
@@ -88,7 +92,9 @@ model Inscripcion {
   estado         String       @default("pendiente")
   telefono       String?
   dictadoCursoId Int
-  dictadoCurso   DictadoCurso @relation(fields: [dictadoCursoId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  dictadoCurso   DictadoCurso @relation(fields: [dictadoCursoId], references: [id], onDelete: Cascade)
+
+  @@map("inscripciones")
 }

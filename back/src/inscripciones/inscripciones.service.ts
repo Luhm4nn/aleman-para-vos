@@ -26,7 +26,7 @@ export class InscripcionesService {
       where: { id: createInscripcionDto.dictadoCursoId },
       include: {
         _count: {
-          select: { inscripcions: true },
+          select: { inscripciones: true },
         },
       },
     });
@@ -35,7 +35,7 @@ export class InscripcionesService {
       throw new NotFoundException('Dictado no encontrado');
     }
 
-    if (dictado.cupos > 0 && dictado._count.inscripcions >= dictado.cupos) {
+    if (dictado.cupos > 0 && dictado._count.inscripciones >= dictado.cupos) {
       throw new BadRequestException(
         'Lo sentimos, no quedan cupos disponibles para este dictado.',
       );

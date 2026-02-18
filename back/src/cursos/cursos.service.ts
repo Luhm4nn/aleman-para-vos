@@ -23,13 +23,13 @@ export class CursosService {
     if (!dictado) return null;
 
     // Solo contamos las inscripciones confirmadas
-    const inscripcionsConfirmadas = Array.isArray(dictado.inscripcions)
-      ? dictado.inscripcions.length
+    const inscripcionesConfirmadas = Array.isArray(dictado.inscripciones)
+      ? dictado.inscripciones.length
       : 0;
 
     // Calculamos cupos disponibles
     const cuposTotales = dictado.cupos || 0;
-    const cuposDisponibles = Math.max(0, cuposTotales - inscripcionsConfirmadas);
+    const cuposDisponibles = Math.max(0, cuposTotales - inscripcionesConfirmadas);
 
     // Creamos el objeto de retorno forzando a que sea un objeto plano
     const mapped = {
@@ -37,8 +37,8 @@ export class CursosService {
       cuposDisponibles
     };
 
-    // Quitamos la relación inscripcions para que no viaje al front
-    delete (mapped as any).inscripcions;
+    // Quitamos la relación inscripciones para que no viaje al front
+    delete (mapped as any).inscripciones;
 
     return mapped;
   }
@@ -48,7 +48,7 @@ export class CursosService {
    */
   private get _dictadoInclude() {
     return {
-      inscripcions: {
+      inscripciones: {
         where: { estado: 'confirmada' },
         select: { id: true },
       },
@@ -79,9 +79,9 @@ export class CursosService {
   async findAll() {
     const cursos = await this.prisma.curso.findMany({
       include: {
-        dictados_curso: {
+        dictadosCurso: {
           include: {
-            inscripcions: {
+            inscripciones: {
               where: { estado: 'confirmada' },
               select: { id: true },
             },
@@ -95,7 +95,7 @@ export class CursosService {
 
     return cursos.map((curso) => ({
       ...curso,
-      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+      dictadosCurso: curso.dictadosCurso.map((d) => this._mapDictado(d)),
     }));
   }
 
@@ -106,9 +106,9 @@ export class CursosService {
     const curso = await this.prisma.curso.findUnique({
       where: { id },
       include: {
-        dictados_curso: {
+        dictadosCurso: {
           include: {
-            inscripcions: {
+            inscripciones: {
               where: { estado: 'confirmada' },
               select: { id: true },
             },
@@ -123,7 +123,7 @@ export class CursosService {
 
     return {
       ...curso,
-      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+      dictadosCurso: curso.dictadosCurso.map((d) => this._mapDictado(d)),
     };
   }
 
@@ -154,9 +154,9 @@ export class CursosService {
         updatedAt: new Date(),
       },
       include: {
-        dictados_curso: {
+        dictadosCurso: {
           include: {
-            inscripcions: {
+            inscripciones: {
               where: { estado: 'confirmada' },
               select: { id: true },
             },
@@ -167,7 +167,7 @@ export class CursosService {
 
     return {
       ...curso,
-      dictados_curso: curso.dictados_curso.map((d) => this._mapDictado(d)),
+      dictadosCurso: curso.dictadosCurso.map((d) => this._mapDictado(d)),
     };
   }
 
@@ -224,7 +224,7 @@ export class CursosService {
       },
       include: {
         curso: true,
-        inscripcions: {
+        inscripciones: {
           where: { estado: 'confirmada' },
           select: { id: true },
         },
@@ -245,7 +245,7 @@ export class CursosService {
       where: { cursoId },
       include: {
         curso: true,
-        inscripcions: {
+        inscripciones: {
           where: { estado: 'confirmada' },
           select: { id: true },
         },
@@ -266,7 +266,7 @@ export class CursosService {
       where: { id },
       include: {
         curso: true,
-        inscripcions: {
+        inscripciones: {
           where: { estado: 'confirmada' },
           select: { id: true },
         },
@@ -326,7 +326,7 @@ export class CursosService {
       },
       include: {
         curso: true,
-        inscripcions: {
+        inscripciones: {
           where: { estado: 'confirmada' },
           select: { id: true },
         },
