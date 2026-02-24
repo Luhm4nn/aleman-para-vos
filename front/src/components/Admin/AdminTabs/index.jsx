@@ -6,7 +6,8 @@ function AdminTabs({ activeTab, setActiveTab }) {
     { id: "inscripciones", label: "Inscripciones" },
     { id: "testimonios", label: "Testimonios" },
     { id: "novedades", label: "Novedades" },
-    { id: "cursos", label: "Cursos" }
+    { id: "cursos", label: "Cursos" },
+    { id: "transferencia", label: "Transferencia" }
   ];
 
   return (

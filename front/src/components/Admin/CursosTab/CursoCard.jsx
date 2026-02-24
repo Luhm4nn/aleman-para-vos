@@ -19,6 +19,10 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
         </div>
       </div>
 
+      <div className="curso-value-badge">
+        <strong>Valor: </strong> AR$ {curso.valor?.toLocaleString('es-AR')}
+      </div>
+
 
       <p className="curso-descripcion">{curso.descripcion}</p>
 

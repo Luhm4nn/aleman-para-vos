@@ -39,6 +39,7 @@ function Inscripcion() {
         telefono: '',
     });
     const [comprobante, setComprobante] = useState(null);
+    const [datosTransferencia, setDatosTransferencia] = useState(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -64,6 +65,21 @@ function Inscripcion() {
         if (id) {
             fetchCurso();
         }
+
+        const fetchDatosTransferencia = async () => {
+            try {
+                const apiUrl = import.meta.env.VITE_API_URL;
+                const response = await fetch(`${apiUrl}/datos-transferencia`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setDatosTransferencia(data);
+                }
+            } catch (err) {
+                console.error("Error fetching datos transferencia:", err);
+            }
+        };
+
+        fetchDatosTransferencia();
     }, [id]);
 
     const formatearFecha = (fechaString) => {
@@ -173,6 +189,7 @@ function Inscripcion() {
                             <h2>¡Inscripción Exitosa!</h2>
                             <div className="success-details">
                                 <p>Muchas gracias por inscribirte en el curso <strong>{curso.titulo}</strong>.</p>
+                                <p>Valor del curso: <strong>AR$ {curso.valor?.toLocaleString('es-AR')}</strong></p>
                                 <p>Tu inscripción ha sido recibida correctamente. Próximamente recibirás un correo en <strong>{inscripcionFormData.email}</strong> una vez que nuestros administrativos confirmen tu inscripción y el comprobante adjunto.</p>
                             </div>
                             <div className="success-notice">
@@ -226,6 +243,10 @@ function Inscripcion() {
                                 <p className="inscripcion-description-text">
                                     {curso.descripcion}
                                 </p>
+                                <div className="inscripcion-price-tag">
+                                    <span className="price-label">Valor del curso:</span>
+                                    <span className="price-amount">AR$ {curso.valor?.toLocaleString('es-AR')}</span>
+                                </div>
                             </div>
 
                             <div className="feature-card-right">
@@ -306,7 +327,7 @@ function Inscripcion() {
                                 ) : (
                                     <div className="no-dictados">
                                         <p>No hay comisiones abiertas por el momento.</p>
-                                        <Link to="/contact" className="text-primary hover:underline text-sm mt-2 block">
+                                        <Link to="/#preguntas" className="text-primary hover:underline text-sm mt-2 block">
                                             Consultar por nuevas fechas
                                         </Link>
                                     </div>
@@ -321,6 +342,36 @@ function Inscripcion() {
                                     <p className="form-instruction">
                                         Completa tus datos para finalizar la inscripción a la comisión de los <span className="highlight-day">{selectedDictado.diasSemana.join(" y ")}</span>.
                                     </p>
+
+                                    <div className="condiciones-pago-box">
+                                        <h3>Condiciones de pago</h3>
+                                        <div className="condiciones-pago-content">
+                                            <p>Los pagos se realizan del <strong>1 al 10</strong> de cada mes.</p>
+                                            <p>Pasado ese plazo, se aplicará un recargo por mora del <strong>10%</strong> sobre el valor de la cuota.</p>
+                                            <p className="aranceles-nota">Los aranceles están sujetos a actualización y/o modificación trimestral, conforme a la dinámica económica vigente.</p>
+                                        </div>
+                                    </div>
+
+                                    {datosTransferencia && (
+                                        <div className="datos-pago-box">
+                                            <h3>Información de Pago</h3>
+                                            <p>Realiza la transferencia a la siguiente cuenta y adjunta el comprobante debajo:</p>
+                                            <div className="datos-pago-grid">
+                                                <div className="dato-pago-item">
+                                                    <span className="dato-label">Titular:</span>
+                                                    <span className="dato-value">{datosTransferencia.nombreCuenta}</span>
+                                                </div>
+                                                <div className="dato-pago-item">
+                                                    <span className="dato-label">Alias:</span>
+                                                    <span className="dato-value">{datosTransferencia.alias}</span>
+                                                </div>
+                                                <div className="dato-pago-item">
+                                                    <span className="dato-label">CVU/CBU:</span>
+                                                    <span className="dato-value">{datosTransferencia.cvu}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <form className="inscripcion-form" onSubmit={handleSubmitInscripcion}>
                                         <div className="form-grid">

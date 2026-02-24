@@ -7,8 +7,10 @@ import ConsultasTab from "./ConsultasTab";
 import TestimoniosTab from "./TestimoniosTab";
 import NovedadesTab from "./NovedadesTab";
 import CursosTab from "./CursosTab";
+import TransferenciaTab from "./TransferenciaTab";
 import { useConsultas } from "./hooks/useConsultas";
 import { useInscripciones } from "./hooks/useInscripciones";
+import { useDatosTransferencia } from "./hooks/useDatosTransferencia";
 import { useTestimonios } from "./hooks/useTestimonios";
 import { useNovedades } from "./hooks/useNovedades";
 import { useCursos } from "./hooks/useCursos";
@@ -29,6 +31,7 @@ function Admin() {
   const testimoniosData = useTestimonios();
   const novedadesData = useNovedades();
   const cursosData = useCursos();
+  const transferenciaData = useDatosTransferencia();
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -155,6 +158,15 @@ function Admin() {
             deleteModal={cursosData.deleteModal}
             onCerrarModalEliminar={cursosData.cerrarModalEliminar}
             onConfirmarEliminacion={cursosData.confirmarEliminacion}
+          />
+        )}
+
+        {activeTab === "transferencia" && (
+          <TransferenciaTab
+            datos={transferenciaData.datos}
+            loading={transferenciaData.loading}
+            onChange={transferenciaData.handleChange}
+            onSubmit={transferenciaData.guardarDatos}
           />
         )}
 

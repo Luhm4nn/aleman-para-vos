@@ -70,6 +70,7 @@ export class CursosService {
     const dataSanitizada = {
       titulo: xss(createCursoDto.titulo),
       descripcion: xss(createCursoDto.descripcion),
+      valor: createCursoDto.valor,
       items: createCursoDto.items.map((item) => xss(item)),
       activo: createCursoDto.activo !== undefined ? createCursoDto.activo : true,
       createdAt: new Date(),
@@ -152,6 +153,9 @@ export class CursosService {
     }
     if (updateCursoDto.activo !== undefined) {
       dataSanitizada.activo = updateCursoDto.activo;
+    }
+    if (updateCursoDto.valor !== undefined) {
+      dataSanitizada.valor = updateCursoDto.valor;
     }
 
     const curso = await this.prisma.curso.update({

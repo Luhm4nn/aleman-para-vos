@@ -85,7 +85,7 @@ ${formData.mensaje}`;
   };
 
   return (
-    <section id="contact" className="contact-section section-padding">
+    <section id="preguntas" className="contact-section section-padding">
       <div className="container">
         <div className="contact-wrapper">
           <div className="contact-header">
@@ -141,16 +141,7 @@ ${formData.mensaje}`;
                   options={levelOptions}
                   placeholder="Selecciona tu nivel"
                 />
-                <div className="test-link-wrapper">
-                  <a
-                    href="https://www.esl-idiomas.com/es/test-idiomas/aleman/test-linea"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="test-link"
-                  >
-                    ¿No sabes tu nivel? Haz un test rápido aquí
-                  </a>
-                </div>
+
               </div>
               <div className="form-group">
                 <label>¿Desde dónde tomarás las clases?</label>

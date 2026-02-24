@@ -13,6 +13,7 @@ export function useCursos() {
     id: null,
     titulo: "",
     descripcion: "",
+    valor: 0,
     items: [""],
     activo: true,
   });
@@ -113,6 +114,7 @@ export function useCursos() {
     const cursoData = {
       titulo: formCurso.titulo,
       descripcion: formCurso.descripcion,
+      valor: parseFloat(formCurso.valor) || 0,
       items: itemsFiltrados,
       activo: formCurso.activo,
     };
@@ -164,6 +166,7 @@ export function useCursos() {
       id: curso.id,
       titulo: curso.titulo,
       descripcion: curso.descripcion,
+      valor: curso.valor || 0,
       items: curso.items.length > 0 ? curso.items : [""],
       activo: curso.activo ?? true,
     });
@@ -244,6 +247,7 @@ export function useCursos() {
       id: null,
       titulo: "",
       descripcion: "",
+      valor: 0,
       items: [""],
       activo: true,
     });
@@ -435,4 +439,3 @@ export function useCursos() {
     confirmarEliminacion,
   };
 }
- 

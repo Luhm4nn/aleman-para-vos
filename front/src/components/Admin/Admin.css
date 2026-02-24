@@ -55,6 +55,21 @@
   box-shadow: var(--shadow-md);
 }
 
+.curso-card .curso-header {
+  margin-bottom: 1rem;
+}
+
+.curso-value-badge {
+  display: inline-block;
+  background: var(--bg-primary);
+  color: var(--color-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
 .form-section h2 {
   margin-bottom: 1.5rem;
   color: var(--text-primary);
