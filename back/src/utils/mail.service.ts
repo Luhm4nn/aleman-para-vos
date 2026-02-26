@@ -28,7 +28,7 @@ export class MailService {
         try {
             await this.transporter.sendMail({
                 from: process.env.MAIL_FROM,
-                to: process.env.ADMIN_EMAIL || process.env.MAIL_FROM, // Notificación para Natalia (administración)
+                to: process.env.ADMIN_EMAIL || process.env.MAIL_FROM, // Notificación para Natalia
                 subject: 'Nueva Inscripción Recibida',
                 html: `
           <h1>Hola Natalia,</h1>
@@ -57,7 +57,7 @@ export class MailService {
             await this.transporter.sendMail({
                 from: process.env.MAIL_FROM,
                 to: emailAlumno,
-                subject: 'Inscripción Confirmada - Proyecto Nati',
+                subject: 'Inscripción Confirmada - Alemán para vos',
                 html: `
           <h1>¡Hola ${nombreAlumno}!</h1>
           <p>Tu inscripción al curso <strong>${nombreCurso}</strong> ha sido confirmada exitosamente.</p>
@@ -65,7 +65,7 @@ export class MailService {
           <p>Si tienes alguna duda, puedes contactarnos respondiendo a este correo.</p>
           <br>
           <p>Saludos,</p>
-          <p>Equipo de Proyecto Nati</p>
+          <p>Equipo de Alemán para vos</p>
         `,
             });
             return { success: true };
