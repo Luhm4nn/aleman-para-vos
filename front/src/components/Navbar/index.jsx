@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "./Navbar.css";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -10,26 +10,26 @@ function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToSection = (id) => {
     setMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   const handleLogoClick = (e) => {
     e.preventDefault();
     setMenuOpen(false);
-    scrollToSection("hero");
+    scrollToSection('hero');
   };
 
   return (
-    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-logo">
           <Link to="/" className="navbar-logo-link" onClick={handleLogoClick}>
@@ -42,36 +42,36 @@ function Navbar() {
           </Link>
         </div>
 
-        <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
+        <div className={`navbar-links ${menuOpen ? 'active' : ''}`}>
           <button
-            onClick={() => scrollToSection("novedades")}
+            onClick={() => scrollToSection('novedades')}
             className="nav-link"
           >
             Novedades
           </button>
           <button
-            onClick={() => scrollToSection("features")}
-            className="nav-link"
-          >
-            Características
-          </button>
-          <button
-            onClick={() => scrollToSection("cursos")}
+            onClick={() => scrollToSection('cursos')}
             className="nav-link"
           >
             Cursos
           </button>
           <button
-            onClick={() => scrollToSection("testimonials")}
+            onClick={() => scrollToSection('features')}
+            className="nav-link"
+          >
+            Características
+          </button>
+          <button
+            onClick={() => scrollToSection('testimonials')}
             className="nav-link"
           >
             Testimonios
           </button>
-          <button onClick={() => scrollToSection("faq")} className="nav-link">
+          <button onClick={() => scrollToSection('faq')} className="nav-link">
             Preguntas
           </button>
           <button
-            onClick={() => scrollToSection("cursos")}
+            onClick={() => scrollToSection('cursos')}
             className="nav-cta-mobile"
           >
             Empezar Ahora
@@ -82,14 +82,11 @@ function Navbar() {
           <Link to="/admin" className="nav-login">
             Admin
           </Link>
-          <button
-            onClick={() => scrollToSection("cursos")}
-            className="nav-cta"
-          >
+          <button onClick={() => scrollToSection('cursos')} className="nav-cta">
             Empezar
           </button>
           <button
-            className={`menu-toggle ${menuOpen ? "active" : ""}`}
+            className={`menu-toggle ${menuOpen ? 'active' : ''}`}
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <span className="hamburger"></span>

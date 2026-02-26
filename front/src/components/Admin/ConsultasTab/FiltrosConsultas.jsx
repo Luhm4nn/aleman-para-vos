@@ -1,30 +1,40 @@
 function FiltrosConsultas({ filtro, setFiltro, contadores }) {
+  const filtros = [
+    { id: 'todas', label: 'Todas', count: contadores.todas || 0 },
+    { id: 'pendiente', label: 'Pendientes', count: contadores.pendiente || 0 },
+    { id: 'revisada', label: 'Revisadas', count: contadores.revisada || 0 },
+    {
+      id: 'contactada',
+      label: 'Contactadas',
+      count: contadores.contactada || 0,
+    },
+  ];
+
   return (
     <div className="filtros">
-      <button
-        className={filtro === "todas" ? "filtro-btn active" : "filtro-btn"}
-        onClick={() => setFiltro("todas")}
+      <select
+        className="admin-dropdown"
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
       >
-        Todas ({contadores.todas || 0})
-      </button>
-      <button
-        className={filtro === "pendiente" ? "filtro-btn active" : "filtro-btn"}
-        onClick={() => setFiltro("pendiente")}
-      >
-        Pendientes ({contadores.pendiente || 0})
-      </button>
-      <button
-        className={filtro === "revisada" ? "filtro-btn active" : "filtro-btn"}
-        onClick={() => setFiltro("revisada")}
-      >
-        Revisadas ({contadores.revisada || 0})
-      </button>
-      <button
-        className={filtro === "contactada" ? "filtro-btn active" : "filtro-btn"}
-        onClick={() => setFiltro("contactada")}
-      >
-        Contactadas ({contadores.contactada || 0})
-      </button>
+        {filtros.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.label} ({f.count})
+          </option>
+        ))}
+      </select>
+
+      <div className="filtros-buttons">
+        {filtros.map((f) => (
+          <button
+            key={f.id}
+            className={`filtro-btn ${filtro === f.id ? 'active' : ''}`}
+            onClick={() => setFiltro(f.id)}
+          >
+            {f.label} ({f.count})
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

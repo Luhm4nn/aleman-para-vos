@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
-import "./AdminHeader.css";
+import { Link } from 'react-router-dom';
+import './AdminHeader.css';
 
 function AdminHeader({ user, onLogout }) {
   return (
     <div className="admin-header-bar">
       <div>
         <h1 className="admin-title">Panel de Administración</h1>
-        <p className="admin-subtitle">Gestión de Consultas, Testimonios, Novedades y Cursos</p>
+        <p className="admin-subtitle">
+          Gestión de Consultas, Cursos, Inscripciones, etc
+        </p>
       </div>
       <div className="user-info">
         <Link to="/" className="back-home-link">
