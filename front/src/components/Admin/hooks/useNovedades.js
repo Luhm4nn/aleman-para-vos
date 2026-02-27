@@ -23,9 +23,9 @@ export function useNovedades() {
   });
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
+    const Token = localStorage.getItem("token");
     return {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${Token}`,
     };
   };
 
