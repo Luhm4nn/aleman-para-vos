@@ -107,3 +107,14 @@ model DatosTransferencia {
 
   @@map("datos_transferencia")
 }
+
+model Material {
+  id           Int    @id @default(autoincrement())
+  nombre       String
+  docUrl       String
+  docPublicId  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("materiales")
+}

@@ -13,6 +13,7 @@ import { CursosModule } from './cursos/cursos.module';
 import { envValidationSchema } from './config/env.validation';
 import { InscripcionesModule } from './inscripciones/inscripciones.module';
 import { DatosTransferenciaModule } from './datos-transferencia/datos-transferencia.module';
+import { MaterialesModule } from './materiales/materiales.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { DatosTransferenciaModule } from './datos-transferencia/datos-transferen
     CursosModule,
     InscripcionesModule,
     DatosTransferenciaModule,
+    MaterialesModule,
   ],
   controllers: [AppController],
   providers: [

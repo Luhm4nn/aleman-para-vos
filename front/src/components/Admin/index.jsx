@@ -6,6 +6,7 @@ import AdminTabs from './AdminTabs';
 import ConsultasTab from './ConsultasTab';
 import TestimoniosTab from './TestimoniosTab';
 import NovedadesTab from './NovedadesTab';
+import MaterialesTab from './MaterialesTab';
 import CursosTab from './CursosTab';
 import TransferenciaTab from './TransferenciaTab';
 import { useConsultas } from './hooks/useConsultas';
@@ -13,6 +14,7 @@ import { useInscripciones } from './hooks/useInscripciones';
 import { useDatosTransferencia } from './hooks/useDatosTransferencia';
 import { useTestimonios } from './hooks/useTestimonios';
 import { useNovedades } from './hooks/useNovedades';
+import { useMateriales } from './hooks/useMateriales';
 import { useCursos } from './hooks/useCursos';
 import InscripcionesTab from './InscripcionesTab';
 import { formatearFecha, getEstadoColor } from './utils/helpers';
@@ -33,6 +35,7 @@ function Admin() {
   });
   const testimoniosData = useTestimonios();
   const novedadesData = useNovedades();
+  const materialesData = useMateriales();
   const transferenciaData = useDatosTransferencia();
 
   useEffect(() => {
@@ -138,6 +141,24 @@ function Admin() {
             deleteModal={novedadesData.deleteModal}
             onCerrarModalEliminar={novedadesData.cerrarModalEliminar}
             onConfirmarEliminacion={novedadesData.confirmarEliminacion}
+          />
+        )}
+
+        {activeTab === 'materiales' && (
+          <MaterialesTab
+            materiales={materialesData.materiales}
+            loading={materialesData.loading}
+            formMaterial={materialesData.formMaterial}
+            onFormChange={materialesData.handleMaterialChange}
+            onArchivoChange={materialesData.handleArchivoChange}
+            onFormSubmit={materialesData.guardarMaterial}
+            onCancelar={materialesData.cancelarEdicion}
+            onEditar={materialesData.editarMaterial}
+            onEliminar={materialesData.abrirModalEliminar}
+            formatearFecha={formatearFecha}
+            deleteModal={materialesData.deleteModal}
+            onCerrarModalEliminar={materialesData.cerrarModalEliminar}
+            onConfirmarEliminacion={materialesData.confirmarEliminacion}
           />
         )}
 
