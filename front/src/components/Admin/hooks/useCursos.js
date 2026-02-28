@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "../../../contexts/ToastContext";
-import { useLoading } from "../../../contexts/LoadingContext";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../../../contexts/ToastContext';
+import { useLoading } from '../../../contexts/LoadingContext';
 
 export function useCursos() {
   const navigate = useNavigate();
@@ -11,19 +11,21 @@ export function useCursos() {
   const [loading, setLoading] = useState(true);
   const [formCurso, setFormCurso] = useState({
     id: null,
-    titulo: "",
-    descripcion: "",
-    items: [""],
+    titulo: '',
+    descripcion: '',
+    valor: 0,
+    valorInternacional: 0,
+    items: [''],
     activo: true,
   });
   const [showDictadoModal, setShowDictadoModal] = useState(false);
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
   const [formDictado, setFormDictado] = useState({
     id: null,
-    horarioInicio: "",
-    horarioFin: "",
-    fechaInicio: "",
-    fechaFin: "",
+    horarioInicio: '',
+    horarioFin: '',
+    fechaInicio: '',
+    fechaFin: '',
     diasSemana: [],
     cupos: 0,
     activo: true,
@@ -32,11 +34,11 @@ export function useCursos() {
     isOpen: false,
     type: null,
     id: null,
-    name: "",
+    name: '',
   });
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     return {
       Authorization: `Bearer ${token}`,
     };
@@ -44,7 +46,7 @@ export function useCursos() {
 
   const cargarCursos = async () => {
     setLoading(true);
-    startLoading("Cargando cursos...");
+    startLoading('Cargando cursos...');
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos`, {
@@ -52,16 +54,16 @@ export function useCursos() {
       });
 
       if (response.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        navigate('/login');
         return;
       }
 
       const data = await response.json();
       setCursos(data);
     } catch (error) {
-      showError("Error al cargar los cursos");
+      showError('Error al cargar los cursos');
     } finally {
       setLoading(false);
       stopLoading();
@@ -88,7 +90,7 @@ export function useCursos() {
   const agregarItem = () => {
     setFormCurso({
       ...formCurso,
-      items: [...formCurso.items, ""],
+      items: [...formCurso.items, ''],
     });
   };
 
@@ -96,29 +98,35 @@ export function useCursos() {
     const newItems = formCurso.items.filter((_, i) => i !== index);
     setFormCurso({
       ...formCurso,
-      items: newItems.length > 0 ? newItems : [""],
+      items: newItems.length > 0 ? newItems : [''],
     });
   };
 
   const guardarCurso = async (e) => {
     e.preventDefault();
 
-    const itemsFiltrados = formCurso.items.filter((item) => item.trim() !== "");
+    const itemsFiltrados = formCurso.items.filter((item) => item.trim() !== '');
 
-    if (!formCurso.titulo || !formCurso.descripcion || itemsFiltrados.length === 0) {
-      showError("Por favor completa todos los campos");
+    if (
+      !formCurso.titulo ||
+      !formCurso.descripcion ||
+      itemsFiltrados.length === 0
+    ) {
+      showError('Por favor completa todos los campos');
       return;
     }
 
     const cursoData = {
       titulo: formCurso.titulo,
       descripcion: formCurso.descripcion,
+      valor: parseFloat(formCurso.valor) || 0,
+      valorInternacional: parseFloat(formCurso.valorInternacional) || 0,
       items: itemsFiltrados,
       activo: formCurso.activo,
     };
 
-    const method = formCurso.id ? "PATCH" : "POST";
-    startLoading(formCurso.id ? "Actualizando curso..." : "Creando curso...");
+    const method = formCurso.id ? 'PATCH' : 'POST';
+    startLoading(formCurso.id ? 'Actualizando curso...' : 'Creando curso...');
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
@@ -130,30 +138,32 @@ export function useCursos() {
         method,
         headers: {
           ...getAuthHeaders(),
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(cursoData),
       });
 
       if (response.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        navigate('/login');
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error al guardar el curso");
+        throw new Error(errorData.message || 'Error al guardar el curso');
       }
 
       showSuccess(
-        formCurso.id ? "Curso actualizado exitosamente" : "Curso creado exitosamente"
+        formCurso.id
+          ? 'Curso actualizado exitosamente'
+          : 'Curso creado exitosamente'
       );
       cancelarEdicion();
       await cargarCursos();
     } catch (error) {
-      showError(error.message || "Error al guardar el curso");
+      showError(error.message || 'Error al guardar el curso');
     } finally {
       stopLoading();
     }
@@ -164,17 +174,18 @@ export function useCursos() {
       id: curso.id,
       titulo: curso.titulo,
       descripcion: curso.descripcion,
-      items: curso.items.length > 0 ? curso.items : [""],
+      valor: curso.valor || 0,
+      valorInternacional: curso.valorInternacional || 0,
+      items: curso.items.length > 0 ? curso.items : [''],
       activo: curso.activo ?? true,
     });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
 
   const abrirModalEliminarCurso = (curso) => {
     setDeleteModal({
       isOpen: true,
-      type: "curso",
+      type: 'curso',
       id: curso.id,
       name: curso.titulo,
     });
@@ -183,7 +194,7 @@ export function useCursos() {
   const abrirModalEliminarDictado = (dictado, cursoTitulo) => {
     setDeleteModal({
       isOpen: true,
-      type: "dictado",
+      type: 'dictado',
       id: dictado.id,
       name: `${cursoTitulo} - ${dictado.horarioInicio}`,
     });
@@ -194,16 +205,16 @@ export function useCursos() {
       isOpen: false,
       type: null,
       id: null,
-      name: "",
+      name: '',
     });
   };
 
   const confirmarEliminacion = async () => {
-    startLoading("Eliminando...");
+    startLoading('Eliminando...');
     try {
-      if (deleteModal.type === "curso") {
+      if (deleteModal.type === 'curso') {
         await eliminarCurso(deleteModal.id);
-      } else if (deleteModal.type === "dictado") {
+      } else if (deleteModal.type === 'dictado') {
         await eliminarDictado(deleteModal.id);
       }
     } finally {
@@ -213,27 +224,27 @@ export function useCursos() {
   };
 
   const eliminarCurso = async (id) => {
-    startLoading("Eliminando curso...");
+    startLoading('Eliminando curso...');
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: getAuthHeaders(),
       });
 
       if (response.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        navigate('/login');
         return;
       }
 
-      if (!response.ok) throw new Error("Error al eliminar el curso");
+      if (!response.ok) throw new Error('Error al eliminar el curso');
 
-      showSuccess("Curso eliminado exitosamente");
+      showSuccess('Curso eliminado exitosamente');
       await cargarCursos();
     } catch (error) {
-      showError("Error al eliminar el curso");
+      showError('Error al eliminar el curso');
     } finally {
       stopLoading();
     }
@@ -242,9 +253,11 @@ export function useCursos() {
   const cancelarEdicion = () => {
     setFormCurso({
       id: null,
-      titulo: "",
-      descripcion: "",
-      items: [""],
+      titulo: '',
+      descripcion: '',
+      valor: 0,
+      valorInternacional: 0,
+      items: [''],
       activo: true,
     });
   };
@@ -256,8 +269,8 @@ export function useCursos() {
         id: dictado.id,
         horarioInicio: dictado.horarioInicio,
         horarioFin: dictado.horarioFin,
-        fechaInicio: dictado.fechaInicio.split("T")[0],
-        fechaFin: dictado.fechaFin.split("T")[0],
+        fechaInicio: dictado.fechaInicio.split('T')[0],
+        fechaFin: dictado.fechaFin.split('T')[0],
         diasSemana: dictado.diasSemana,
         cupos: dictado.cupos || 0,
         activo: dictado.activo ?? true,
@@ -265,10 +278,10 @@ export function useCursos() {
     } else {
       setFormDictado({
         id: null,
-        horarioInicio: "",
-        horarioFin: "",
-        fechaInicio: "",
-        fechaFin: "",
+        horarioInicio: '',
+        horarioFin: '',
+        fechaInicio: '',
+        fechaFin: '',
         diasSemana: [],
         cupos: 0,
         activo: true,
@@ -282,10 +295,10 @@ export function useCursos() {
     setCursoSeleccionado(null);
     setFormDictado({
       id: null,
-      horarioInicio: "",
-      horarioFin: "",
-      fechaInicio: "",
-      fechaFin: "",
+      horarioInicio: '',
+      horarioFin: '',
+      fechaInicio: '',
+      fechaFin: '',
       diasSemana: [],
       cupos: 0,
       activo: true,
@@ -319,7 +332,7 @@ export function useCursos() {
       !formDictado.fechaFin ||
       formDictado.diasSemana.length === 0
     ) {
-      showError("Por favor completa todos los campos");
+      showError('Por favor completa todos los campos');
       return;
     }
 
@@ -334,72 +347,74 @@ export function useCursos() {
       activo: formDictado.activo,
     };
 
-    startLoading(formDictado.id ? "Actualizando dictado..." : "Guardando dictado...");
+    startLoading(
+      formDictado.id ? 'Actualizando dictado...' : 'Guardando dictado...'
+    );
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const url = formDictado.id
         ? `${apiUrl}/cursos/dictados/${formDictado.id}`
         : `${apiUrl}/cursos/dictados`;
-      const method = formDictado.id ? "PATCH" : "POST";
+      const method = formDictado.id ? 'PATCH' : 'POST';
 
       const response = await fetch(url, {
         method,
         headers: {
           ...getAuthHeaders(),
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(dictadoData),
       });
 
       if (response.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        navigate('/login');
         return;
       }
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Error al guardar el dictado");
+        throw new Error(errorData.message || 'Error al guardar el dictado');
       }
 
       showSuccess(
         formDictado.id
-          ? "Dictado actualizado exitosamente"
-          : "Dictado creado exitosamente"
+          ? 'Dictado actualizado exitosamente'
+          : 'Dictado creado exitosamente'
       );
       cerrarModalDictado();
       await cargarCursos();
     } catch (error) {
-      showError(error.message || "Error al guardar el dictado");
+      showError(error.message || 'Error al guardar el dictado');
     } finally {
       stopLoading();
     }
   };
 
   const eliminarDictado = async (dictadoId) => {
-    startLoading("Eliminando dictado...");
+    startLoading('Eliminando dictado...');
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/cursos/dictados/${dictadoId}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: getAuthHeaders(),
       });
 
       if (response.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        navigate('/login');
         return;
       }
 
-      if (!response.ok) throw new Error("Error al eliminar el dictado");
+      if (!response.ok) throw new Error('Error al eliminar el dictado');
 
-      showSuccess("Dictado eliminado exitosamente");
+      showSuccess('Dictado eliminado exitosamente');
       await cargarCursos();
     } catch (error) {
-      showError("Error al eliminar el dictado");
+      showError('Error al eliminar el dictado');
     } finally {
       stopLoading();
     }
@@ -412,6 +427,7 @@ export function useCursos() {
   return {
     cursos,
     loading,
+    cargarCursos,
     formCurso,
     handleCursoChange,
     handleItemChange,
@@ -435,4 +451,3 @@ export function useCursos() {
     confirmarEliminacion,
   };
 }
- 

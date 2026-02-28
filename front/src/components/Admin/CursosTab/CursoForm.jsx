@@ -50,6 +50,40 @@ function CursoForm({
         </div>
 
         <div className="form-group">
+          <label htmlFor="valor">
+            Valor del Curso (AR$)
+          </label>
+          <input
+            type="number"
+            id="valor"
+            name="valor"
+            value={formCurso.valor}
+            onChange={onChange}
+            required
+            min={0}
+            step="0.01"
+            placeholder="Ej: 15000"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="valorInternacional">
+            Valor Internacional (EUR €)
+          </label>
+          <input
+            type="number"
+            id="valorInternacional"
+            name="valorInternacional"
+            value={formCurso.valorInternacional}
+            onChange={onChange}
+            required
+            min={0}
+            step="0.01"
+            placeholder="Ej: 50"
+          />
+        </div>
+
+        <div className="form-group">
           <label>Contenidos del Curso</label>
           {formCurso.items.map((item, index) => (
             <div key={index} className="item-input-group">

@@ -1,8 +1,23 @@
 import { useState } from 'react';
-import { ChevronDownIcon, PlusIcon, PencilIcon, TrashIcon } from '../../shared/UI/Icons';
-import { calculateMonthDuration } from '../../../utils/dateUtils';
+import {
+  ChevronDownIcon,
+  PlusIcon,
+  PencilIcon,
+  TrashIcon,
+  UserGroupIcon,
+} from '../../shared/UI/Icons';
+import { calculateMonthDuration, formatearRangoHorario, formatearFechaSinHora } from '../../../utils/dateUtils';
+import ReactCountryFlag from 'react-country-flag';
 
-function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDictado, onEliminarDictado, formatearFecha }) {
+function CursoCard({
+  curso,
+  onEditar,
+  onEliminar,
+  onAgregarDictado,
+  onEditarDictado,
+  onEliminarDictado,
+  formatearFecha,
+}) {
   const [dictadosExpanded, setDictadosExpanded] = useState(false);
 
   return (
@@ -19,6 +34,9 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
         </div>
       </div>
 
+      <div className="curso-value-badge">
+        <strong>Valor: </strong> AR$ {curso.valor?.toLocaleString('es-AR')} | € {curso.valorInternacional?.toLocaleString('es-ES')}
+      </div>
 
       <p className="curso-descripcion">{curso.descripcion}</p>
 
@@ -41,9 +59,13 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
           >
             <div className="dictados-toggle-content">
               <strong>Dictados Programados</strong>
-              <span className="dictados-count">{curso.dictadosCurso.length || 0}</span>
+              <span className="dictados-count">
+                {curso.dictadosCurso.length || 0}
+              </span>
             </div>
-            <ChevronDownIcon className={`toggle-icon ${dictadosExpanded ? 'expanded' : ''}`} />
+            <ChevronDownIcon
+              className={`toggle-icon ${dictadosExpanded ? 'expanded' : ''}`}
+            />
           </button>
 
           {dictadosExpanded && (
@@ -52,12 +74,46 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
                 <div key={dictado.id} className="dictado-item">
                   <div className="dictado-info">
                     <div className="dictado-horario">
-                      <strong>{dictado.horarioInicio} - {dictado.horarioFin}</strong>
-                      <span className="dictado-dias">{dictado.diasSemana.join(", ")}</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {formatearRangoHorario(dictado.horarioInicio, dictado.horarioFin) && (
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 'bold' }}>
+                            {formatearRangoHorario(dictado.horarioInicio, dictado.horarioFin).horarioArg}
+                            <ReactCountryFlag countryCode="AR" svg style={{ width: '1.2em', height: '1.2em' }} /> /
+                            {formatearRangoHorario(dictado.horarioInicio, dictado.horarioFin).horarioEur}
+                            <ReactCountryFlag countryCode="ES" svg style={{ width: '1.2em', height: '1.2em' }} />
+                            <ReactCountryFlag countryCode="DE" svg style={{ width: '1.2em', height: '1.2em' }} />
+                          </div>
+                        )}
+                      </div>
+                      <span className="dictado-dias" style={{ flexShrink: 0 }}>
+                        {dictado.diasSemana.map(d => d.charAt(0).toUpperCase() + d.slice(1, 3)).join(', ')}
+                      </span>
                     </div>
                     <div className="dictado-detalles">
-                      <span>{formatearFecha(dictado.fechaInicio)} al {formatearFecha(dictado.fechaFin)}</span>
-                      <span>• {calculateMonthDuration(dictado.fechaInicio, dictado.fechaFin)} {calculateMonthDuration(dictado.fechaInicio, dictado.fechaFin) === 1 ? "mes" : "meses"}</span>
+                      <span>
+                        {formatearFechaSinHora(dictado.fechaInicio)} al{' '}
+                        {formatearFechaSinHora(dictado.fechaFin)}
+                      </span>
+                      <span>
+                        •{' '}
+                        {calculateMonthDuration(
+                          dictado.fechaInicio,
+                          dictado.fechaFin
+                        )}{' '}
+                        {calculateMonthDuration(
+                          dictado.fechaInicio,
+                          dictado.fechaFin
+                        ) === 1
+                          ? 'mes'
+                          : 'meses'}
+                      </span>
+                    </div>
+                    <div className="dictado-cupos-status">
+                      <UserGroupIcon className="w-4 h-4" />
+                      <span>
+                        {dictado.cuposOcupados || 0} / {dictado.cupos || 0}{' '}
+                        alumnos
+                      </span>
                     </div>
                   </div>
                   <div className="dictado-actions">
@@ -74,13 +130,13 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
                       <TrashIcon className="w-4 h-4" />
                     </button>
                   </div>
-
                 </div>
               ))}
             </div>
           )}
         </div>
-      )}
+      )
+      }
 
       <div className="curso-footer">
         <span className="fecha">Creado: {formatearFecha(curso.createdAt)}</span>
@@ -88,7 +144,7 @@ function CursoCard({ curso, onEditar, onEliminar, onAgregarDictado, onEditarDict
           <PlusIcon className="w-4 h-4" /> Agregar Dictado
         </button>
       </div>
-    </div>
+    </div >
   );
 }
 

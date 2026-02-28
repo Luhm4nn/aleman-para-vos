@@ -53,14 +53,16 @@ model Novedad {
 }
 
 model Curso {
-  id            Int            @id @default(autoincrement())
-  titulo        String
-  descripcion   String
-  items         String[]
-  activo        Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  dictadosCurso DictadoCurso[]
+  id                 Int            @id @default(autoincrement())
+  titulo             String
+  descripcion        String
+  items              String[]
+  activo             Boolean        @default(true)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  valor              Float          @default(0)
+  valorInternacional Float          @default(0)
+  dictadosCurso      DictadoCurso[]
 
   @@map("cursos")
 }
@@ -96,4 +98,25 @@ model Inscripcion {
   dictadoCurso   DictadoCurso @relation(fields: [dictadoCursoId], references: [id], onDelete: Cascade)
 
   @@map("inscripciones")
+}
+
+model DatosTransferencia {
+  id           Int    @id @default(autoincrement())
+  alias        String
+  cvu          String
+  nombreCuenta String
+  tipo         String @default("nacional")
+
+  @@map("datos_transferencia")
+}
+
+model Material {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  docUrl      String
+  docPublicId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("materiales")
 }

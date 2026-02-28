@@ -45,7 +45,6 @@
 }
 
 /* Modern Friendly Palette Map */
-/* Modern Friendly Palette Map */
 .card-0 {
     background-color: var(--color-primary);
     /* Indigo */
@@ -79,10 +78,16 @@
     color: white;
 }
 
+
 .card-3 {
     background-color: var(--color-gold);
     /* Amber */
-    color: var(--text-primary);
+    color: white;
+}
+
+.card-3 h3,
+.card-3 p {
+    color: white;
 }
 
 .card-4 {
@@ -93,6 +98,17 @@
 
 .card-4 h3,
 .card-4 p {
+    color: white;
+}
+
+.card-5 {
+    background-color: var(--color-extra, #6366f1);
+    /* Extra color, fallback to Indigo 500 */
+    color: white;
+}
+
+.card-5 h3,
+.card-5 p {
     color: white;
 }
 

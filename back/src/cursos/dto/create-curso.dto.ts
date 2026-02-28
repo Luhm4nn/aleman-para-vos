@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, MinLength } from 'class-validator';
 
 export class CreateCursoDto {
   @IsString()
@@ -16,6 +16,16 @@ export class CreateCursoDto {
   @IsArray()
   @IsString({ each: true })
   items: string[];
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  valor: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  valorInternacional: number;
 
   @IsBoolean()
   @IsOptional()

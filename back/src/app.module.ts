@@ -12,6 +12,8 @@ import { NovedadesModule } from './novedades/novedades.module';
 import { CursosModule } from './cursos/cursos.module';
 import { envValidationSchema } from './config/env.validation';
 import { InscripcionesModule } from './inscripciones/inscripciones.module';
+import { DatosTransferenciaModule } from './datos-transferencia/datos-transferencia.module';
+import { MaterialesModule } from './materiales/materiales.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { InscripcionesModule } from './inscripciones/inscripciones.module';
     NovedadesModule,
     CursosModule,
     InscripcionesModule,
+    DatosTransferenciaModule,
+    MaterialesModule,
   ],
   controllers: [AppController],
   providers: [

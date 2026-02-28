@@ -1,8 +1,10 @@
-/* Filtros */
 .filtros {
+  margin-bottom: 2.5rem;
+}
+
+.filtros-buttons {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2.5rem;
   flex-wrap: wrap;
 }
 

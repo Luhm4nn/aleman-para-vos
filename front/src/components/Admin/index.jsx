@@ -1,46 +1,54 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSessionTimeout } from "../../hooks/useSessionTimeout";
-import AdminHeader from "./AdminHeader";
-import AdminTabs from "./AdminTabs";
-import ConsultasTab from "./ConsultasTab";
-import TestimoniosTab from "./TestimoniosTab";
-import NovedadesTab from "./NovedadesTab";
-import CursosTab from "./CursosTab";
-import { useConsultas } from "./hooks/useConsultas";
-import { useInscripciones } from "./hooks/useInscripciones";
-import { useTestimonios } from "./hooks/useTestimonios";
-import { useNovedades } from "./hooks/useNovedades";
-import { useCursos } from "./hooks/useCursos";
-import InscripcionesTab from "./InscripcionesTab";
-import { formatearFecha, getEstadoColor } from "./utils/helpers";
-import LogoutConfirmationModal from "./LogoutConfirmationModal";
-import "./Admin.css";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSessionTimeout } from '../../hooks/useSessionTimeout';
+import AdminHeader from './AdminHeader';
+import AdminTabs from './AdminTabs';
+import ConsultasTab from './ConsultasTab';
+import TestimoniosTab from './TestimoniosTab';
+import NovedadesTab from './NovedadesTab';
+import MaterialesTab from './MaterialesTab';
+import CursosTab from './CursosTab';
+import TransferenciaTab from './TransferenciaTab';
+import { useConsultas } from './hooks/useConsultas';
+import { useInscripciones } from './hooks/useInscripciones';
+import { useDatosTransferencia } from './hooks/useDatosTransferencia';
+import { useTestimonios } from './hooks/useTestimonios';
+import { useNovedades } from './hooks/useNovedades';
+import { useMateriales } from './hooks/useMateriales';
+import { useCursos } from './hooks/useCursos';
+import InscripcionesTab from './InscripcionesTab';
+import { formatearFecha, getEstadoColor } from './utils/helpers';
+import LogoutConfirmationModal from './LogoutConfirmationModal';
+import './Admin.css';
 
 function Admin() {
   const navigate = useNavigate();
   useSessionTimeout();
-  const [activeTab, setActiveTab] = useState("consultas");
+  const [activeTab, setActiveTab] = useState('inscripciones');
   const [user, setUser] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const consultasData = useConsultas();
-  const inscripcionesData = useInscripciones();
+  const cursosData = useCursos();
+  const inscripcionesData = useInscripciones({
+    onDataChange: cursosData.cargarCursos,
+  });
   const testimoniosData = useTestimonios();
   const novedadesData = useNovedades();
-  const cursosData = useCursos();
+  const materialesData = useMateriales();
+  const transferenciaData = useDatosTransferencia();
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
+    const userData = localStorage.getItem('user');
     if (userData) {
       setUser(JSON.parse(userData));
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    navigate("/login");
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    navigate('/login');
     setShowLogoutModal(false);
   };
 
@@ -51,7 +59,7 @@ function Admin() {
 
         <AdminTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {activeTab === "consultas" && (
+        {activeTab === 'consultas' && (
           <ConsultasTab
             consultas={consultasData.consultas}
             loading={consultasData.loading}
@@ -70,7 +78,7 @@ function Admin() {
           />
         )}
 
-        {activeTab === "inscripciones" && (
+        {activeTab === 'inscripciones' && (
           <InscripcionesTab
             inscripciones={inscripcionesData.inscripciones}
             loading={inscripcionesData.loading}
@@ -90,10 +98,17 @@ function Admin() {
             confirmModal={inscripcionesData.confirmModal}
             onCerrarModalConfirmar={inscripcionesData.cerrarModalConfirmar}
             onConfirmarAceptacion={inscripcionesData.confirmarAceptacion}
+            showModalInscripcion={inscripcionesData.showModalInscripcion}
+            onAbrirModalInscripcion={inscripcionesData.abrirModalInscripcion}
+            onCerrarModalInscripcion={inscripcionesData.cerrarModalInscripcion}
+            formInscripcion={inscripcionesData.formInscripcion}
+            onInscripcionChange={inscripcionesData.handleInscripcionChange}
+            onInscripcionSubmit={inscripcionesData.guardarInscripcionAdmin}
+            cursosDropdown={inscripcionesData.cursosDropdown}
           />
         )}
 
-        {activeTab === "testimonios" && (
+        {activeTab === 'testimonios' && (
           <TestimoniosTab
             testimonios={testimoniosData.testimonios}
             loading={testimoniosData.loading}
@@ -110,7 +125,7 @@ function Admin() {
           />
         )}
 
-        {activeTab === "novedades" && (
+        {activeTab === 'novedades' && (
           <NovedadesTab
             novedades={novedadesData.novedades}
             loading={novedadesData.loading}
@@ -129,7 +144,25 @@ function Admin() {
           />
         )}
 
-        {activeTab === "cursos" && (
+        {activeTab === 'materiales' && (
+          <MaterialesTab
+            materiales={materialesData.materiales}
+            loading={materialesData.loading}
+            formMaterial={materialesData.formMaterial}
+            onFormChange={materialesData.handleMaterialChange}
+            onArchivoChange={materialesData.handleArchivoChange}
+            onFormSubmit={materialesData.guardarMaterial}
+            onCancelar={materialesData.cancelarEdicion}
+            onEditar={materialesData.editarMaterial}
+            onEliminar={materialesData.abrirModalEliminar}
+            formatearFecha={formatearFecha}
+            deleteModal={materialesData.deleteModal}
+            onCerrarModalEliminar={materialesData.cerrarModalEliminar}
+            onConfirmarEliminacion={materialesData.confirmarEliminacion}
+          />
+        )}
+
+        {activeTab === 'cursos' && (
           <CursosTab
             cursos={cursosData.cursos}
             loading={cursosData.loading}
@@ -158,7 +191,16 @@ function Admin() {
           />
         )}
 
-
+        {activeTab === 'transferencia' && (
+          <TransferenciaTab
+            datosNacional={transferenciaData.datosNacional}
+            datosInternacional={transferenciaData.datosInternacional}
+            loading={transferenciaData.loading}
+            onChangeNacional={transferenciaData.handleChangeNacional}
+            onChangeInternacional={transferenciaData.handleChangeInternacional}
+            onSubmit={transferenciaData.guardarDatos}
+          />
+        )}
 
         <LogoutConfirmationModal
           isOpen={showLogoutModal}

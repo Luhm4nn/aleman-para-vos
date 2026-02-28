@@ -1,218 +1,132 @@
 # 📖 Guía de Uso - Panel de Administración
 
-## 🎯 Para Natalia Luhmann
+## � Deutsch für Dich
 
-Esta guía explica cómo usar el sistema de gestión de consultas de clases de alemán.
-
----
-
-## 🔐 Iniciar Sesión
-
-1. Ir a: **[https://deutsch-fur-dich.vercel.app/login](https://deutsch-fur-dich.vercel.app/login)**
-2. Ingresar credenciales:
-   - **Email:** (La que configuraste en el servidor)
-   - **Contraseña:** (La que configuraste en el servidor)
-3. Click en "Iniciar Sesión"
-
-**⚠️ Importante:** Por seguridad, la sesión se cerrará automáticamente después de 30 minutos de inactividad.
+Esta guía contiene todo lo necesario para gestionar el sistema de cursos e inscripciones de alemán de forma eficiente y segura.
 
 ---
 
-## 📋 Panel de Administración
+## � Índice
 
-### Vista Principal
-
-Al iniciar sesión, verás:
-
-- **Barra superior:** Tu nombre y botón de "Cerrar Sesión"
-- **Filtros:** Botones para filtrar consultas por estado
-- **Lista de consultas:** Todas las peticiones de clases
-
-### Estados de Consultas
-
-Cada consulta puede tener 3 estados:
-
-1. **🟡 Pendiente** - Nueva consulta sin revisar
-2. **🔵 Revisada** - Ya leíste la consulta
-3. **🟢 Contactada** - Ya contactaste al alumno
+1. [�🔐 Iniciar Sesión](#-iniciar-sesión)
+2. [👥 Gestión de Inscripciones (Principal)](#-gestión-de-inscripciones-principal)
+   - [✅ Estados de Inscripción](#-estados-de-inscripción)
+   - [➕ Nueva Inscripción Manual](#-nueva-inscripción-manual)
+   - [📧 Confirmación de Alumnos](#-confirmación-de-alumnos)
+3. [📚 Gestión de Cursos y Dictados](#-gestión-de-cursos-y-dictados)
+   - [📌 Estructura: Curso vs Dictado](#-estructura-curso-vs-dictado)
+   - [👥 Control de Cupos (Alumnos)](#-control-de-cupos-alumnos)
+4. [📬 Gestión de Consultas](#-gestión-de-consultas)
+5. [📣 Novedades y Testimonios](#-novedades-y-testimonios)
+6. [💳 Datos de Transferencia](#-datos-de-transferencia)
+7. [�️ Seguridad y Buenas Prácticas](#️-seguridad-y-buenas-prácticas)
+8. [🆘 Solución de Problemas (FAQ)](#-solución-de-problemas-faq)
 
 ---
 
-## 📝 Gestionar Consultas
+## � Iniciar Sesión
 
-### Ver Consultas
-
-**Todas las consultas:**
-
-- Click en el botón "Todas" (muestra el número total)
-
-**Filtrar por estado:**
-
-- Click en "Pendientes" - solo las no revisadas
-- Click en "Revisadas" - las que ya leíste
-- Click en "Contactadas" - alumnos ya contactados
-
-### Información de Cada Consulta
-
-Cada tarjeta muestra:
-
-- ✅ Nombre del interesado
-- ✅ Email de contacto
-- ✅ Teléfono (si lo proporcionó)
-- ✅ Mensaje / consulta
-- ✅ Fecha y hora de la consulta
-- ✅ Estado actual
-
-### Cambiar Estado
-
-1. Ubicar la consulta
-2. En el menú desplegable de la tarjeta, seleccionar el nuevo estado:
-   - Pendiente
-   - Revisada
-   - Contactada
-3. El cambio se guarda automáticamente
-
-### Eliminar Consulta
-
-⚠️ **Usar con cuidado - esta acción no se puede deshacer**
-
-1. Ubicar la consulta a eliminar
-2. Click en botón "Eliminar"
-3. Confirmar en el mensaje que aparece
-4. La consulta se borrará permanentemente
+1. Accede a: **[https://deutsch-fur-dich.vercel.app/login](https://deutsch-fur-dich.vercel.app/login)**
+2. Ingresa tu **Email** y **Contraseña**.
+3. Por seguridad, la sesión expira tras **30 minutos** de inactividad.
 
 ---
 
-## 🛡️ Seguridad
+## 👥 Gestión de Inscripciones (Principal)
 
-### ✅ El sistema te protege de:
+Esta es la pestaña por defecto al entrar. Aquí gestionas a todos los alumnos que se anotan a tus cursos.
 
-- Intentos de hackeo (máximo 5 intentos de login por minuto)
-- Spam de consultas (máximo 3 por hora por persona)
-- Consultas duplicadas (no se puede enviar la misma consulta 2 veces en 24h)
-- Ataques XSS (el código malicioso se limpia automáticamente)
-- Acceso no autorizado (todos los endpoints admin requieren login)
+### ✅ Estados de Inscripción
 
-### 🔒 Buenas Prácticas
+- **🟡 Pendiente**: El alumno completó el formulario web pero aún no ha sido confirmado (generalmente esperando tu confirmacion del pago).
+- **🟢 Confirmada**: El alumno ya es parte oficial del curso. El sistema le envía un mail automático al confirmar.
 
-1. **Cerrar sesión** cuando termines de trabajar
-2. **No compartir** tu contraseña
-3. La sesión se cierra sola después de 30 minutos sin actividad
-4. Si ves "No autorizado", vuelve a iniciar sesión
+### ➕ Nueva Inscripción Manual
 
----
+Si un alumno te contacta por fuera de la web (WhatsApp, Instagram, etc.), puedes registrarlo tú misma:
 
-## 📱 Acceso desde Cualquier Dispositivo
+1. Click en el botón **"+ Nueva Inscripción"**.
+2. Completa los datos (Nombre, Email, etc.).
+3. **Selecciona el Curso** y luego el **Dictado** (Horario) correspondiente.
+4. Al guardar, el alumno quedará registrado como **Confirmada** automáticamente y se actualizarán los cupos del curso.
 
-El panel funciona en:
+### 📧 Confirmación de Alumnos
 
-- 💻 Computadora (Windows, Mac, Linux)
-- 📱 Celular (Android, iOS)
-- 📟 Tablet
+Para confirmar a alguien que se anotó por la web:
 
-Solo necesitas un navegador moderno (Chrome, Firefox, Safari, Edge).
+1. Ubica al alumno en la lista "Pendientes".
+2. Click en el botón de **Confirmar (Icono de Sobre)**.
+3. El sistema le enviará un mail profesional con el éxito de la inscripción y lo moverá a la lista de "Confirmados".
 
 ---
 
-## 🆘 Problemas Comunes
+## � Gestión de Cursos y Dictados
 
-### "Credenciales inválidas"
+Aquí configuras la oferta educativa.
 
-- Verifica que el email sea el correcto.
-- Si olvidaste la contraseña, contacta al desarrollador para que ejecute el script de reinicio de credenciales.
+### � Estructura: Curso vs Dictado
 
-### "No autorizado" / "401"
+- **Curso**: Es el tema general (ej: "Alemán Nivel A1"). Aquí defines el precio, descripción y qué incluye.
+- **Dictado**: Son las instancias específicas de ese curso. Un mismo curso puede tener varios dictados (ej: uno a la mañana y otro a la tarde).
 
-- Tu sesión expiró
-- Vuelve a iniciar sesión
-- La sesión dura 30 minutos desde la última actividad
+### 👥 Control de Cupos (Alumnos)
 
-### "Demasiadas consultas"
+En cada dictado verás un indicador: `👥 5 / 20 alumnos`.
 
-- Estás haciendo muchas acciones muy rápido
-- Espera 1 minuto e intenta de nuevo
-
-### La página se ve rara
-
-- Refresca el navegador (F5 o Ctrl+R)
-- Limpia el caché del navegador
-- Prueba en otro navegador
+- **Sincronización Automática**: Este número se actualiza solo. Cada vez que confirmas a un alumno o borras una inscripción, el contador cambia en tiempo real.
+- **Límite**: El sistema no permitirá inscripciones web adicionales si el cupo está lleno.
 
 ---
 
-## 📊 Flujo de Trabajo Recomendado
+## � Gestión de Consultas
 
-### Diariamente:
+Aquí llegan los mensajes generales del formulario de contacto.
 
-1. Iniciar sesión en el panel
-2. Click en "Pendientes" para ver nuevas consultas
-3. Leer cada consulta
-4. Cambiar estado a "Revisada"
-5. Contactar al alumno por email o teléfono
-6. Cambiar estado a "Contactada"
-
-### Semanalmente:
-
-- Revisar consultas "Revisadas" que aún no fueron contactadas
-- Limpiar consultas antiguas (opcional)
-
-### Tips:
-
-- 📧 Puedes copiar el email directamente desde la tarjeta
-- 📞 Si hay teléfono, aparecerá en la información
-- 📅 Las fechas están ordenadas (más recientes arriba)
-- 🔍 Usa los filtros para organizarte mejor
+- Filtra por **Pendientes**, **Revisadas** o **Contactadas** para organizar tu seguimiento.
+- Cambia el estado en el menú desplegable de cada tarjeta a medida que avanzas.
 
 ---
 
-## 🌐 URLs Importantes
+## � Novedades y Testimonios
 
-- **Landing page:** https://deutsch-fur-dich.vercel.app
-- **Panel admin:** https://deutsch-fur-dich.vercel.app/admin
-- **Login:** https://deutsch-fur-dich.vercel.app/login
-
----
-
-## 👨‍💻 Soporte Técnico
-
-**Desarrollador:** Emiliano Luhmann
-
-**Para reportar problemas:**
-
-1. Describe qué estabas haciendo
-2. Qué mensaje de error apareció (si hay)
-3. En qué dispositivo/navegador estás
-4. Captura de pantalla (si es posible)
-
-**Reset de Contraseña (Solo Admin):**
-Si necesitas resetear la contraseña del administrador, pide al desarrollador que ejecute:
-
-```bash
-npm run create:admin
-```
-
-(Con las nuevas credenciales configuradas en el servidor).
+- **Novedades**: Publica noticias o promociones con imagen. Aparecen en la sección "Novedades" de la web.
+- **Testimonios**: Gestiona los comentarios de tus alumnos. Puedes editarlos para corregir errores de ortografía si es necesario.
 
 ---
 
-## 🎓 Recordatorios
+## 💳 Datos de Transferencia
 
-- ✅ Tu contraseña está encriptada (nadie puede verla)
-- ✅ El sistema registra la fecha de cada consulta
-- ✅ Los datos están en una base de datos segura (PostgreSQL)
-- ✅ Todo el tráfico debe ser HTTPS en producción
-- ✅ El sistema previene spam y duplicados automáticamente
+En esta sección puedes actualizar tu CBU/Alias y nombre de cuenta. Estos datos se muestran automáticamente en el mail que recibe el alumno cuando se anota por la web (estado pendiente).
 
 ---
 
-## 📈 Estadísticas
+## �️ Seguridad y Buenas Prácticas
 
-En la vista "Todas", el número entre paréntesis muestra:
-
-- Total de consultas en el sistema
-
-Ejemplo: **Todas (15)** significa que hay 15 consultas en total.
+1. **Protección Anti-Spam**: El sistema limita la cantidad de mensajes que una persona puede enviar por hora.
+2. **Cierre de Sesión**: Siempre cierra tu sesión al terminar, especialmente en computadoras públicas.
+3. **Imágenes**: Al subir fotos en Novedades, intenta que no sean extremadamente pesadas para que la web cargue rápido.
 
 ---
 
-¡Listo! Ya puedes gestionar las consultas de tus alumnos de forma segura y organizada. 🎉
+## � Solución de Problemas (FAQ)
+
+### ❓ "Registré un alumno pero el cupo no cambió"
+
+- El sistema refresca los datos automáticamente, pero si por algún problema de internet no lo ves, simplemente cambia de pestaña y vuelve a entrar a "Cursos".
+
+### ❓ "El alumno dice que no recibió el mail de confirmación"
+
+1. Pídele que revise la carpeta de **SPAM/Correo no deseado**.
+2. Verifica que el email ingresado en el registro sea el correcto.
+
+### ❓ "Me aparece el mensaje: No autorizado"
+
+- Tu sesión ha expirado por inactividad. Solo debes volver a iniciar sesión.
+
+### ❓ "Olvidé mi contraseña"
+
+- Por seguridad, las contraseñas no se pueden recuperar. Contacta a Emiliano para resetearla desde el servidor.
+
+---
+
+**Desarrollado con ❤️ para Natalia Luhmann**
