@@ -10,8 +10,8 @@ async function createAdminUser() {
     const adminName = process.env.ADMIN_NAME || 'Natalia Luhmann';
 
     if (!adminPassword) {
-        console.error('❌ Error: La variable de entorno ADMIN_PASSWORD es requerida.');
-        return;
+      console.error('❌ Error: La variable de entorno ADMIN_PASSWORD es requerida.');
+      return;
     }
 
     // Verificar si ya existe
@@ -22,13 +22,13 @@ async function createAdminUser() {
     if (existingUser) {
       console.log('✅ El usuario admin ya existe en la base de datos.');
       console.log('Email:', existingUser.email);
-      // No mostramos la contraseña por seguridad
+      // No mostramos la contraseña por segurida
       return;
     }
 
     // Crear usuario
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    
+
     const user = await prisma.user.create({
       data: {
         email: adminEmail,
