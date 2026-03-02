@@ -229,8 +229,15 @@
 
 .curso-title {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: var(--text-primary);
+}
+
+.curso-price {
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
 }
 
 .curso-description {
@@ -283,8 +290,8 @@
 .btn-inscribirse {
     width: 100%;
     padding: 1rem;
-    background: linear-gradient(135deg, var(--color-primary), #818cf8);
-    color: white;
+    background: linear-gradient(135deg, var(--color-primary), #fbbf24);
+    color: #1e293b;
     border: none;
     border-radius: var(--radius-md);
     font-weight: 600;

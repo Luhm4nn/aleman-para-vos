@@ -184,6 +184,51 @@ function InscripcionForm({
                 </div>
               ) : null;
             })()}
+
+            {/* Dólares */}
+            {(() => {
+              const dolares =
+                datosTransferencia.find((d) => d.tipo === 'dolares') ||
+                datosTransferencia.find((d) => d.id === 3);
+              return dolares && dolares.nombreCuenta ? (
+                <div className="datos-pago-grid" style={{ marginTop: '1.5rem' }}>
+                  <div
+                    className="dato-pago-item"
+                    style={{ gridColumn: '1 / -1' }}
+                  >
+                    <span
+                      className="dato-label"
+                      style={{
+                        fontWeight: 700,
+                        fontSize: '1.05rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <ReactCountryFlag
+                        countryCode="US"
+                        svg
+                        style={{ width: '1.4em', height: '1.4em' }}
+                      />{' '}
+                      Transferencia en Dólares (USD)
+                    </span>
+                  </div>
+                  <div className="dato-pago-item">
+                    <span className="dato-label">Titular:</span>
+                    <span className="dato-value">{dolares.nombreCuenta}</span>
+                  </div>
+                  <div className="dato-pago-item">
+                    <span className="dato-label">Info Adicional:</span>
+                    <span className="dato-value">{dolares.alias}</span>
+                  </div>
+                  <div className="dato-pago-item">
+                    <span className="dato-label">Cuenta/ACH/IBAN:</span>
+                    <span className="dato-value">{dolares.cvu}</span>
+                  </div>
+                </div>
+              ) : null;
+            })()}
           </div>
         )}
 

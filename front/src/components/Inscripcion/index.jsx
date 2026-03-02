@@ -239,6 +239,9 @@ function Inscripcion() {
                   <span className="price-amount">
                     AR$ {curso.valor?.toLocaleString('es-AR')} | €{' '}
                     {curso.valorInternacional?.toLocaleString('es-ES')}
+                    {curso.valorDolares > 0 && (
+                      <> | US$ {curso.valorDolares?.toLocaleString('en-US')}</>
+                    )}
                   </span>
                 </div>
               </div>

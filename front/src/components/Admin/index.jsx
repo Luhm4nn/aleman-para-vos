@@ -57,7 +57,12 @@ function Admin() {
       <div className="admin-container">
         <AdminHeader user={user} onLogout={() => setShowLogoutModal(true)} />
 
-        <AdminTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+        <AdminTabs 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          hasPendingInscripciones={inscripcionesData.contadores?.pendiente > 0}
+          hasPendingConsultas={consultasData.contadores?.pendiente > 0}
+        />
 
         {activeTab === 'consultas' && (
           <ConsultasTab
@@ -198,9 +203,11 @@ function Admin() {
           <TransferenciaTab
             datosNacional={transferenciaData.datosNacional}
             datosInternacional={transferenciaData.datosInternacional}
+            datosDolares={transferenciaData.datosDolares}
             loading={transferenciaData.loading}
             onChangeNacional={transferenciaData.handleChangeNacional}
             onChangeInternacional={transferenciaData.handleChangeInternacional}
+            onChangeDolares={transferenciaData.handleChangeDolares}
             onSubmit={transferenciaData.guardarDatos}
           />
         )}

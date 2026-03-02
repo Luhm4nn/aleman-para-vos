@@ -103,7 +103,12 @@ function Cursos() {
                       <h3 className="curso-title">{curso.titulo}</h3>
 
                       <p className="curso-description">{curso.descripcion}</p>
-
+                      <div className="curso-price">
+                        AR$ {curso.valor?.toLocaleString('es-AR')} | €{' '}
+                        {curso.valorInternacional?.toLocaleString('es-ES')}
+                        {curso.valorDolares > 0 &&
+                          ` | US$ ${curso.valorDolares?.toLocaleString('en-US')}`}
+                      </div>
                       {curso.items && curso.items.length > 0 && (
                         <div className="curso-features-list">
                           {curso.items.map((item, idx) => (
