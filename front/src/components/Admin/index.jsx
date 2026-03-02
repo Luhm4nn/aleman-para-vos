@@ -155,10 +155,13 @@ function Admin() {
             onCancelar={materialesData.cancelarEdicion}
             onEditar={materialesData.editarMaterial}
             onEliminar={materialesData.abrirModalEliminar}
+            onVer={materialesData.abrirPreview}
             formatearFecha={formatearFecha}
             deleteModal={materialesData.deleteModal}
             onCerrarModalEliminar={materialesData.cerrarModalEliminar}
             onConfirmarEliminacion={materialesData.confirmarEliminacion}
+            previewModal={materialesData.previewModal}
+            onCerrarPreview={materialesData.cerrarPreview}
           />
         )}
 
