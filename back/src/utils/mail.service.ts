@@ -68,7 +68,7 @@ export class MailService {
           <h1>¡Hola ${nombreAlumno}!</h1>
           <p>Tu inscripción al curso <strong>${nombreCurso}</strong> ha sido confirmada exitosamente.</p>
           <p>Estamos muy felices de tenerte con nosotros. Pronto recibirás más información sobre el inicio de clases.</p>
-          <p>Si tienes alguna duda, puedes contactarnos respondiendo a este correo.</p>
+          <p>Si tienes alguna duda, puedes contactarnos a ${process.env.ADMIN_EMAIL}.</p>
           <br>
           <p>Saludos,</p>
           <p>Equipo de Alemán para vos</p>
