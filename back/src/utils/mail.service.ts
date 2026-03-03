@@ -7,12 +7,12 @@ export class MailService {
     private transporter: nodemailer.Transporter;
     constructor(private prisma: PrismaService) {
         this.transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
+            host: process.env.MAIL_HOST || "smtp.gmail.com",
+            port: Number(process.env.MAIL_PORT) || 465,
+            secure: process.env.MAIL_SECURE !== 'false', // Default to true if not 'false'
             auth: {
                 user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASS, // La contraseña de aplicación
+                pass: process.env.MAIL_PASS,
             },
         });
     }
@@ -68,7 +68,7 @@ export class MailService {
           <h1>¡Hola ${nombreAlumno}!</h1>
           <p>Tu inscripción al curso <strong>${nombreCurso}</strong> ha sido confirmada exitosamente.</p>
           <p>Estamos muy felices de tenerte con nosotros. Pronto recibirás más información sobre el inicio de clases.</p>
-          <p>Si tienes alguna duda, puedes contactarnos respondiendo a este correo.</p>
+          <p>Si tienes alguna duda, puedes contactarnos a ${process.env.ADMIN_EMAIL}.</p>
           <br>
           <p>Saludos,</p>
           <p>Equipo de Alemán para vos</p>
