@@ -20,7 +20,7 @@
 ```bash
 # 1. Clonar repositorio
 git clone <url-del-repo>
-cd proyecto-nati
+cd aleman-para-vos
 
 # 2. Backend
 cd back

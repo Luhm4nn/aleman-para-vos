@@ -36,7 +36,7 @@ Plataforma web completa para la gestión de cursos de alemán. Incluye sitio pú
 ## Arquitectura
 
 ```
-proyecto-nati/
+aleman-para-vos/
 ├── back/                   # API REST (NestJS)
 │   ├── src/
 │   │   ├── auth/           # Autenticación JWT
