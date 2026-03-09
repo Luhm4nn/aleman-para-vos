@@ -18,13 +18,13 @@
   padding: 0 60px;
 }
 
-.carousel-track {
+.novedades-carousel .carousel-track {
   position: relative;
   height: 520px;
   overflow: visible;
 }
 
-.carousel-slide {
+.novedades-carousel .carousel-slide {
   position: absolute;
   top: 0;
   left: 50%;
@@ -37,20 +37,20 @@
   z-index: 1;
 }
 
-.carousel-slide.active {
+.novedades-carousel .carousel-slide.active {
   opacity: 1;
   transform: translateX(-50%) scale(1);
   pointer-events: auto;
   z-index: 3;
 }
 
-.carousel-slide.prev {
+.novedades-carousel .carousel-slide.prev {
   opacity: 0.4;
   transform: translateX(-120%) scale(0.85);
   z-index: 2;
 }
 
-.carousel-slide.next {
+.novedades-carousel .carousel-slide.next {
   opacity: 0.4;
   transform: translateX(20%) scale(0.85);
   z-index: 2;
@@ -139,7 +139,7 @@
 }
 
 /* Carousel Buttons */
-.carousel-btn {
+.novedades-carousel .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -160,30 +160,30 @@
   font-weight: 300;
 }
 
-.carousel-btn:hover {
+.novedades-carousel .carousel-btn:hover {
   background: var(--color-primary);
   color: white;
   transform: translateY(-50%) scale(1.1);
   box-shadow: var(--shadow-lg);
 }
 
-.carousel-btn-prev {
+.novedades-carousel .carousel-btn-prev {
   left: 0;
 }
 
-.carousel-btn-next {
+.novedades-carousel .carousel-btn-next {
   right: 0;
 }
 
 /* Carousel Dots */
-.carousel-dots {
+.novedades-carousel .carousel-dots {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
   margin-top: 2.5rem;
 }
 
-.carousel-dot {
+.novedades-carousel .carousel-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -194,13 +194,13 @@
   padding: 0;
 }
 
-.carousel-dot:hover {
+.novedades-carousel .carousel-dot:hover {
   transform: scale(1.2);
   background: var(--color-primary);
   opacity: 0.7;
 }
 
-.carousel-dot.active {
+.novedades-carousel .carousel-dot.active {
   background: var(--color-primary);
   transform: scale(1.3);
 }
@@ -215,12 +215,12 @@
     padding: 0 40px;
   }
 
-  .carousel-track {
+  .novedades-carousel .carousel-track {
     height: 650px;
   }
 
-  .carousel-slide.prev,
-  .carousel-slide.next {
+  .novedades-carousel .carousel-slide.prev,
+  .novedades-carousel .carousel-slide.next {
     opacity: 0;
     transform: translateX(-50%) scale(0.8);
   }
@@ -251,17 +251,17 @@
     font-size: 0.95rem;
   }
 
-  .carousel-btn {
+  .novedades-carousel .carousel-btn {
     width: 40px;
     height: 40px;
     font-size: 1.5rem;
   }
 
-  .carousel-btn-prev {
+  .novedades-carousel .carousel-btn-prev {
     left: -10px;
   }
 
-  .carousel-btn-next {
+  .novedades-carousel .carousel-btn-next {
     right: -10px;
   }
 }
@@ -271,7 +271,7 @@
     padding: 0 30px;
   }
 
-  .carousel-track {
+  .novedades-carousel .carousel-track {
     height: 620px;
   }
 
