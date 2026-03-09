@@ -1,21 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
-import * as nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 @Injectable()
 export class MailService {
-    private transporter: nodemailer.Transporter;
+    private resend: Resend;
     constructor(private prisma: PrismaService) {
-        this.transporter = nodemailer.createTransport({
-            host: process.env.MAIL_HOST || "smtp.gmail.com",
-            port: Number(process.env.MAIL_PORT) || 465,
-            secure: process.env.MAIL_SECURE !== 'false', // Default to true if not 'false'
-            auth: {
-                user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASS,
-            },
-        });
+        this.resend = new Resend(process.env.RESEND_API_KEY);
     }
+
     async sendMailNotificacionInscripcion(inscripcionId: number, emailAlumno: string, nombre: string, apellido: string, dictadoCursoId: number, comprobanteUrl?: string) {
 
         const dictadoCurso = await this.prisma.dictadoCurso.findUnique({
@@ -28,9 +21,9 @@ export class MailService {
         const adminUrl = `${process.env.FRONTEND_URL}/admin?tab=inscripciones&id=${inscripcionId}`;
 
         try {
-            await this.transporter.sendMail({
-                from: process.env.MAIL_FROM,
-                to: process.env.ADMIN_EMAIL || process.env.MAIL_FROM, // Notificación para Natalia
+            const { data, error } = await this.resend.emails.send({
+                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
+                to: process.env.ADMIN_EMAIL || 'alemanparavos.cursos@gmail.com', // Notificación para Natalia
                 subject: 'Nueva Inscripción Recibida',
                 html: `
           <h1>Hola Natalia,</h1>
@@ -41,51 +34,45 @@ export class MailService {
           <p>Saludos cordiales</p>
         `,
             });
-            return { success: true };
+
+            if (error) {
+                console.error('🔴 Error de Resend enviando mail de notificación:', error);
+                return { success: false, error };
+            }
+
+            return { success: true, data };
         } catch (error) {
-            console.error('🔴 Error enviando mail de notificación:', {
-                message: error.message,
-                stack: error.stack,
-                config: {
-                    MAIL_FROM: process.env.MAIL_FROM,
-                    MAIL_USER: process.env.MAIL_USER,
-                    MAIL_PASS: process.env.MAIL_PASS ? '***' + process.env.MAIL_PASS.slice(-4) : 'NOT_FOUND',
-                    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
-                    MAIL_PASS_FULL: process.env.MAIL_PASS // Added full pass as requested for debugging
-                }
-            });
+            console.error('🔴 Excepción enviando mail de notificación:', error);
             return { success: false, error };
         }
     }
 
     async sendMailConfirmacionExito(emailAlumno: string, nombreAlumno: string, nombreCurso: string) {
         try {
-            await this.transporter.sendMail({
-                from: process.env.MAIL_FROM,
+            const { data, error } = await this.resend.emails.send({
+                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
+                // Resend requires verified domains to send to custom emails, otherwise using testing email
                 to: emailAlumno,
                 subject: 'Inscripción Confirmada - Alemán para vos',
                 html: `
           <h1>¡Hola ${nombreAlumno}!</h1>
           <p>Tu inscripción al curso <strong>${nombreCurso}</strong> ha sido confirmada exitosamente.</p>
           <p>Estamos muy felices de tenerte con nosotros. Pronto recibirás más información sobre el inicio de clases.</p>
-          <p>Si tienes alguna duda, puedes contactarnos a ${process.env.ADMIN_EMAIL}.</p>
+          <p>Si tienes alguna duda, puedes contactarnos a ${process.env.ADMIN_EMAIL || 'alemanparavos.cursos@gmail.com'}.</p>
           <br>
           <p>Saludos,</p>
           <p>Equipo de Alemán para vos</p>
         `,
             });
-            return { success: true };
+
+            if (error) {
+                console.error('🔴 Error de Resend enviando mail de confirmación:', error);
+                return { success: false, error };
+            }
+
+            return { success: true, data };
         } catch (error) {
-            console.error('🔴 Error enviando mail de confirmación:', {
-                message: error.message,
-                stack: error.stack,
-                config: {
-                    MAIL_FROM: process.env.MAIL_FROM,
-                    MAIL_USER: process.env.MAIL_USER,
-                    MAIL_PASS: process.env.MAIL_PASS ? '***' + process.env.MAIL_PASS.slice(-4) : 'NOT_FOUND',
-                    MAIL_PASS_FULL: process.env.MAIL_PASS
-                }
-            });
+            console.error('🔴 Excepción enviando mail de confirmación:', error);
             return { success: false, error };
         }
     }
