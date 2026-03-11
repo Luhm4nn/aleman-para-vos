@@ -18,38 +18,39 @@
   padding: 0 60px;
 }
 
-.carousel-track {
+.novedades-carousel .carousel-track {
   position: relative;
-  height: 480px;
+  height: 520px;
   overflow: visible;
 }
 
-.carousel-slide {
+.novedades-carousel .carousel-slide {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%) scale(0.8);
   width: 100%;
+  height: 100%;
   opacity: 0;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   z-index: 1;
 }
 
-.carousel-slide.active {
+.novedades-carousel .carousel-slide.active {
   opacity: 1;
   transform: translateX(-50%) scale(1);
   pointer-events: auto;
   z-index: 3;
 }
 
-.carousel-slide.prev {
+.novedades-carousel .carousel-slide.prev {
   opacity: 0.4;
   transform: translateX(-120%) scale(0.85);
   z-index: 2;
 }
 
-.carousel-slide.next {
+.novedades-carousel .carousel-slide.next {
   opacity: 0.4;
   transform: translateX(20%) scale(0.85);
   z-index: 2;
@@ -64,7 +65,8 @@
   transition: all 0.4s ease;
   display: flex;
   flex-direction: row;
-  max-height: 450px;
+  height: 100%;
+  width: 100%;
 }
 
 .carousel-slide.active .novedad-card-public {
@@ -72,17 +74,22 @@
 }
 
 .novedad-image-container {
-  width: 45%;
-  min-height: 100%;
+  width: 42%;
+  height: 100%;
   overflow: hidden;
   background: var(--bg-primary);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .novedad-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform 0.6s ease;
 }
 
@@ -91,47 +98,48 @@
 }
 
 .novedad-content-public {
-  padding: 2rem;
-  text-align: center;
+  padding: 2.5rem 2rem;
+  text-align: left;
   overflow-y: auto;
   flex: 1;
   min-width: 0;
-  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .novedad-content-public::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .novedad-content-public::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f1f1;
 }
 
 .novedad-content-public::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  background: var(--color-primary);
+  border-radius: 10px;
+  opacity: 0.5;
 }
 
 .novedad-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   font-family: var(--font-heading);
-  line-height: 1.3;
+  line-height: 1.2;
+  flex-shrink: 0;
 }
 
 .novedad-description {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
 }
 
 /* Carousel Buttons */
-.carousel-btn {
+.novedades-carousel .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -152,30 +160,30 @@
   font-weight: 300;
 }
 
-.carousel-btn:hover {
+.novedades-carousel .carousel-btn:hover {
   background: var(--color-primary);
   color: white;
   transform: translateY(-50%) scale(1.1);
   box-shadow: var(--shadow-lg);
 }
 
-.carousel-btn-prev {
+.novedades-carousel .carousel-btn-prev {
   left: 0;
 }
 
-.carousel-btn-next {
+.novedades-carousel .carousel-btn-next {
   right: 0;
 }
 
 /* Carousel Dots */
-.carousel-dots {
+.novedades-carousel .carousel-dots {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
   margin-top: 2.5rem;
 }
 
-.carousel-dot {
+.novedades-carousel .carousel-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -186,13 +194,13 @@
   padding: 0;
 }
 
-.carousel-dot:hover {
+.novedades-carousel .carousel-dot:hover {
   transform: scale(1.2);
   background: var(--color-primary);
   opacity: 0.7;
 }
 
-.carousel-dot.active {
+.novedades-carousel .carousel-dot.active {
   background: var(--color-primary);
   transform: scale(1.3);
 }
@@ -207,50 +215,53 @@
     padding: 0 40px;
   }
 
-  .carousel-track {
-    height: 550px;
+  .novedades-carousel .carousel-track {
+    height: 650px;
   }
 
-  .carousel-slide.prev,
-  .carousel-slide.next {
+  .novedades-carousel .carousel-slide.prev,
+  .novedades-carousel .carousel-slide.next {
     opacity: 0;
     transform: translateX(-50%) scale(0.8);
   }
 
   .novedad-card-public {
     flex-direction: column;
-    max-height: 520px;
+    height: 100%;
   }
 
   .novedad-image-container {
     width: 100%;
-    height: 280px;
-    min-height: auto;
+    height: 380px;
+    flex: 0 0 380px;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .novedad-content-public {
     padding: 1.5rem;
+    overflow-y: auto;
   }
 
   .novedad-title {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
 
   .novedad-description {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
-  .carousel-btn {
+  .novedades-carousel .carousel-btn {
     width: 40px;
     height: 40px;
     font-size: 1.5rem;
   }
 
-  .carousel-btn-prev {
+  .novedades-carousel .carousel-btn-prev {
     left: -10px;
   }
 
-  .carousel-btn-next {
+  .novedades-carousel .carousel-btn-next {
     right: -10px;
   }
 }
@@ -260,16 +271,17 @@
     padding: 0 30px;
   }
 
-  .carousel-track {
-    height: 500px;
+  .novedades-carousel .carousel-track {
+    height: 620px;
   }
 
   .novedad-card-public {
-    max-height: 470px;
+    height: 100%;
   }
 
   .novedad-image-container {
-    height: auto;
+    height: 320px;
+    flex: 0 0 320px;
   }
 
   .novedad-content-public {
@@ -277,10 +289,10 @@
   }
 
   .novedad-title {
-    font-size: 1.15rem;
+    font-size: 1.25rem;
   }
 
   .novedad-description {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
 }
