@@ -326,6 +326,29 @@ export class InscripcionesService {
     return Array.from(emailsUnicosMap.values());
   }
 
+  private async procesarEnvioMasivo(emails: string[], asunto: string, cuerpo: string) {
+    const BATCH_SIZE = 5;
+    const DELAY_MS = 1500;
+
+    for (let i = 0; i < emails.length; i += BATCH_SIZE) {
+      const lote = emails.slice(i, i + BATCH_SIZE);
+
+      await Promise.all(
+        lote.map(email =>
+          this.mailService.sendMailMasivo(email, asunto, cuerpo).catch(err =>
+            console.error(`🔴 Error enviando correo masivo a ${email}:`, err)
+          )
+        )
+      );
+
+      if (i + BATCH_SIZE < emails.length) {
+        await new Promise(resolve => setTimeout(resolve, DELAY_MS));
+      }
+    }
+
+    console.log(`✅ Envío masivo finalizado: ${emails.length} correos procesados.`);
+  }
+
   async enviarCorreoMasivo(emails: string[], asunto: string, cuerpo: string) {
     if (!emails || emails.length === 0) {
       throw new BadRequestException('No se proporcionaron correos electrónicos');
@@ -335,23 +358,14 @@ export class InscripcionesService {
       throw new BadRequestException('El asunto y el cuerpo del correo son obligatorios');
     }
 
-    // Enviamos los correos individualmente pero en paralelo de forma controlada o simplemente uno tras otro
-    const resultados: { email: string; success: boolean }[] = [];
-
-    // Mejor iteramos y enviamos secuencialmente o usamos Promise.allSi no son demasiados, Promise.all esta bien.
-    // Si son muchísimos (>50), tal vez convenga un bucle for-of para no saturar la API
-    for (const email of emails) {
-      const resultado = await this.mailService.sendMailMasivo(email, asunto, cuerpo);
-      resultados.push({ email, success: resultado.success });
-    }
-
-    const fallidos = resultados.filter(r => !r.success);
+    // Dispara el proceso en segundo plano: no bloquea la respuesta HTTP
+    this.procesarEnvioMasivo(emails, asunto, cuerpo).catch(err =>
+      console.error('🔴 Error inesperado en procesarEnvioMasivo:', err)
+    );
 
     return {
-      message: `Se enviaron ${resultados.length - fallidos.length} correos exitosamente.`,
-      enviados: resultados.length - fallidos.length,
-      fallidos: fallidos.length,
-      detalles: fallidos
+      message: `Proceso iniciado: se enviarán ${emails.length} correos en segundo plano.`,
+      total: emails.length,
     };
   }
 }
