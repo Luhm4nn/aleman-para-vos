@@ -123,3 +123,13 @@ model Material {
 
   @@map("materiales")
 }
+
+model CorreoEnviado {
+  id            Int      @id @default(autoincrement())
+  destinatarios String[]
+  asunto        String
+  cuerpo        String
+  createdAt     DateTime @default(now())
+
+  @@map("correos_enviados")
+}

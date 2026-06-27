@@ -17,6 +17,7 @@ import { useNovedades } from './hooks/useNovedades';
 import { useMateriales } from './hooks/useMateriales';
 import { useCursos } from './hooks/useCursos';
 import { useCorreosMasivos } from './hooks/useCorreosMasivos';
+import { useCorreosEnviados } from './hooks/useCorreosEnviados';
 import InscripcionesTab from './InscripcionesTab';
 import CorreosTab from './CorreosTab';
 import { formatearFecha, getEstadoColor } from './utils/helpers';
@@ -40,6 +41,7 @@ function Admin() {
   const materialesData = useMateriales();
   const transferenciaData = useDatosTransferencia();
   const correosData = useCorreosMasivos();
+  const correosEnviadosData = useCorreosEnviados();
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
@@ -229,6 +231,10 @@ function Admin() {
             removeEmail={correosData.removeEmail}
             enviarCorreos={correosData.enviarCorreos}
             copiarPrompt={correosData.copiarPrompt}
+            correosEnviados={correosEnviadosData.correos}
+            historialLoading={correosEnviadosData.loading}
+            paginacionHistorial={correosEnviadosData.paginacion}
+            onCambiarPaginaHistorial={correosEnviadosData.cargarHistorial}
           />
         )}
 

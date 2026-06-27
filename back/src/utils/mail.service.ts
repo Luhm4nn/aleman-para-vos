@@ -19,26 +19,36 @@ export class MailService {
         });
         const nombreCurso = dictadoCurso?.curso.titulo;
         const adminUrl = `${process.env.FRONTEND_URL}/admin?tab=inscripciones&id=${inscripcionId}`;
-
-        try {
-            const { data, error } = await this.resend.emails.send({
-                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
-                to: process.env.ADMIN_EMAIL || 'alemanparavos.cursos@gmail.com', // Notificación para Natalia
-                subject: 'Nueva Inscripción Recibida',
-                html: `
+        const asunto = 'Nueva Inscripción Recibida';
+        const cuerpoHtml = `
           <h1>Hola Natalia,</h1>
           <p>Te informamos que el alumno ${nombre} ${apellido} (${emailAlumno}) ha solicitado inscribirse en el curso <strong>${nombreCurso}</strong></p>
           ${comprobanteUrl ? `<p>Puedes ver el comprobante de pago aquí: <a href="${comprobanteUrl}" target="_blank">Ver Comprobante</a></p>` : '<p>No se adjuntó comprobante.</p>'}
           <p>Cuando confirmes que se encuentra realizada la transacción, puedes confirmar la inscripción desde el panel administrador:</p>
           <p><a href="${adminUrl}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Confirmar Inscripción en Panel</a></p>
           <p>Saludos cordiales</p>
-        `,
+        `;
+
+        try {
+            const { data, error } = await this.resend.emails.send({
+                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
+                to: process.env.ADMIN_EMAIL || 'alemanparavos.cursos@gmail.com',
+                subject: asunto,
+                html: cuerpoHtml,
             });
 
             if (error) {
                 console.error('🔴 Error de Resend enviando mail de notificación:', error);
                 return { success: false, error };
             }
+
+            this.prisma.correoEnviado.create({
+                data: {
+                    destinatarios: [process.env.ADMIN_EMAIL || 'alemanparavos.cursos@gmail.com'],
+                    asunto,
+                    cuerpo: cuerpoHtml,
+                },
+            }).catch(err => console.error('🔴 Error guardando historial de notificación:', err));
 
             return { success: true, data };
         } catch (error) {
@@ -48,13 +58,8 @@ export class MailService {
     }
 
     async sendMailConfirmacionExito(emailAlumno: string, nombreAlumno: string, nombreCurso: string) {
-        try {
-            const { data, error } = await this.resend.emails.send({
-                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
-                // Resend requires verified domains to send to custom emails, otherwise using testing email
-                to: emailAlumno,
-                subject: 'Inscripción Confirmada - Alemán para vos',
-                html: `
+        const asunto = 'Inscripción Confirmada - Alemán para vos';
+        const cuerpoHtml = `
           <h1>¡Hola ${nombreAlumno}!</h1>
           <p>Tu inscripción al curso <strong>${nombreCurso}</strong> ha sido confirmada exitosamente.</p>
           <p>Estamos muy felices de tenerte con nosotros. Pronto recibirás más información sobre el inicio de clases.</p>
@@ -62,13 +67,28 @@ export class MailService {
           <br>
           <p>Saludos,</p>
           <p>Equipo de Alemán para vos</p>
-        `,
+        `;
+
+        try {
+            const { data, error } = await this.resend.emails.send({
+                from: process.env.MAIL_FROM || 'info@alemanparavos.com',
+                to: emailAlumno,
+                subject: asunto,
+                html: cuerpoHtml,
             });
 
             if (error) {
                 console.error('🔴 Error de Resend enviando mail de confirmación:', error);
                 return { success: false, error };
             }
+
+            this.prisma.correoEnviado.create({
+                data: {
+                    destinatarios: [emailAlumno],
+                    asunto,
+                    cuerpo: cuerpoHtml,
+                },
+            }).catch(err => console.error('🔴 Error guardando historial de confirmación:', err));
 
             return { success: true, data };
         } catch (error) {

@@ -358,6 +358,17 @@ export class InscripcionesService {
       throw new BadRequestException('El asunto y el cuerpo del correo son obligatorios');
     }
 
+    // Guardar registro del envío en la base de datos
+    this.prisma.correoEnviado.create({
+      data: {
+        destinatarios: emails,
+        asunto,
+        cuerpo,
+      },
+    }).catch(err =>
+      console.error('🔴 Error guardando historial de correo masivo:', err)
+    );
+
     // Dispara el proceso en segundo plano: no bloquea la respuesta HTTP
     this.procesarEnvioMasivo(emails, asunto, cuerpo).catch(err =>
       console.error('🔴 Error inesperado en procesarEnvioMasivo:', err)

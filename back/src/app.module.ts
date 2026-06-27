@@ -14,6 +14,7 @@ import { envValidationSchema } from './config/env.validation';
 import { InscripcionesModule } from './inscripciones/inscripciones.module';
 import { DatosTransferenciaModule } from './datos-transferencia/datos-transferencia.module';
 import { MaterialesModule } from './materiales/materiales.module';
+import { CorreosEnviadosModule } from './correos-enviados/correos-enviados.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MaterialesModule } from './materiales/materiales.module';
     InscripcionesModule,
     DatosTransferenciaModule,
     MaterialesModule,
+    CorreosEnviadosModule,
   ],
   controllers: [AppController],
   providers: [
