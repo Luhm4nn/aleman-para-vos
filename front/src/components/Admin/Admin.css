@@ -172,3 +172,318 @@
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
   }
 }
+
+/* =============================================
+   CorreosTab - Sub-tabs, Historial y Body Modal
+   ============================================= */
+
+/* Sub-tabs internos (Enviar / Historial) */
+.correos-subtabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  padding-bottom: 0;
+}
+
+.correos-subtab-btn {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+  transition: all 0.2s ease;
+}
+
+.correos-subtab-btn:hover {
+  color: var(--text-primary, #1f2937);
+}
+
+.correos-subtab-btn.active {
+  color: var(--color-primary, #6366f1);
+  border-bottom-color: var(--color-primary, #6366f1);
+}
+
+/* Historial table */
+.historial-container {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+.historial-table-wrapper {
+  overflow-x: auto;
+}
+
+.historial-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.historial-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  color: var(--text-secondary, #6b7280);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.historial-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  color: var(--text-primary, #1f2937);
+}
+
+.historial-table tbody tr:hover {
+  background-color: var(--bg-primary, #f8fafc);
+}
+
+.historial-table .fecha-cell {
+  white-space: nowrap;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.85rem;
+}
+
+.historial-table .asunto-cell {
+  font-weight: 500;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.historial-table .destinatarios-cell {
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.85rem;
+}
+
+.more-destinatarios {
+  color: var(--color-primary, #6366f1);
+  font-weight: 500;
+}
+
+.btn-ver {
+  padding: 0.4rem 0.8rem;
+  background: var(--bg-primary, #f8fafc);
+  color: var(--color-primary, #6366f1);
+  border: 1px solid var(--color-primary, #6366f1);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-ver:hover {
+  background: var(--color-primary, #6366f1);
+  color: white;
+}
+
+/* Paginación del historial */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+.paginacion button {
+  padding: 0.5rem 1rem;
+  background: white;
+  color: var(--color-primary, #6366f1);
+  border: 1px solid var(--color-primary, #6366f1);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.paginacion button:hover:not(:disabled) {
+  background: var(--color-primary, #6366f1);
+  color: white;
+}
+
+.paginacion button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginacion span {
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.85rem;
+}
+
+/* Modal para visualizar cuerpo del correo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-content.modal-lg {
+  max-width: 800px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  padding-right: 1rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-meta {
+  margin-bottom: 1rem;
+}
+
+.modal-meta p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.cuerpo-preview {
+  border: 1px solid var(--border-color, #e5e7eb);
+  padding: 1.5rem;
+  border-radius: var(--radius-sm);
+  background-color: #fff;
+  min-height: 100px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.cuerpo-preview h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+.cuerpo-preview h2 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+.cuerpo-preview p { margin-bottom: 1rem; line-height: 1.6; }
+.cuerpo-preview a { color: var(--color-primary, #6366f1); }
+.cuerpo-preview img { max-width: 100%; height: auto; }
+
+/* Destinatarios en tabla */
+.destinatarios-resumen {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.btn-ver-todos {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-primary, #6366f1);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-ver-todos:hover {
+  color: var(--color-primary-dark, #4f46e5);
+}
+
+.btn-ver-todos-inline {
+  padding: 0;
+  margin-left: 0.25rem;
+  background: none;
+  border: none;
+  color: var(--color-primary, #6366f1);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-ver-todos-inline:hover {
+  color: var(--color-primary-dark, #4f46e5);
+}
+
+/* Modal de lista de destinatarios */
+.destinatarios-lista {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.destinatario-item {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-primary, #1f2937);
+  border-bottom: 1px solid var(--border-color, #f3f4f6);
+  word-break: break-all;
+}
+
+.destinatario-item:last-child {
+  border-bottom: none;
+}
