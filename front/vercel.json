@@ -5,7 +5,7 @@
     }
   },
   "github": {
-    "enabled": true,
+    "enabled": false,
     "autoAlias": false
   },
   "rewrites": [
